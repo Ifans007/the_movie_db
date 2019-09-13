@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.PopularTable
+import com.example.themoviedb.database.entities.MoviesTable
 
 class PopularViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
 
@@ -19,7 +19,7 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
     var movieReleaseDate: TextView
     var moviePoster: ImageView
     var movieOverView: TextView
-    private var movie: PopularTable? = null
+    private var movie: MoviesTable? = null
 
     init{
         movieTitle = itemView!!.findViewById(R.id.single_item_movie_title)
@@ -29,10 +29,12 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
         moviePoster = itemView.findViewById(R.id.single_item_movie_image)
         movieOverView = itemView.findViewById(R.id.single_item_movie_overview)
 
+
+
     }
 
 
-    fun bindPopularData(movie: PopularTable?) {
+    fun bindPopularData(movie: MoviesTable?) {
 
         if (movie == null) {
             return
@@ -41,10 +43,10 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
             this.movie = movie
 
             movieTitle.text = movie.title
-            movieRating.rating = movie.voteAverage!!.div(2)
+//            movieRating.rating = movie.voteAverage!!.div(2)
             movieReleaseDate.text = movie.releaseDate!!
             movieOverView.text = movie.overview
-            movieType.text = movie.genreString
+//            movieType.text = movie.genreString
 
             Glide.with(context).load(buildImageUrl(movie.posterPath!!)).thumbnail(0.05f)
                 .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)

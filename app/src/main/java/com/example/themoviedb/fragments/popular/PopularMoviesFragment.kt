@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.PopularTable
+import com.example.themoviedb.database.DatabaseApp
+import com.example.themoviedb.database.entities.MoviesTable
 import com.example.themoviedb.database.repositories.PopularRepository
 import com.example.themoviedb.fragments.popular.inflater.PopularAdapter
 import com.example.themoviedb.fragments.popular.inflater.PopularViewModel
@@ -48,6 +49,8 @@ class PopularMoviesFragment : Fragment() {
 
         getPopularData()
 
+        DatabaseApp.getInstance().additionsDao()
+
         return mainView
     }
 
@@ -70,7 +73,7 @@ class PopularMoviesFragment : Fragment() {
         movieAdapter = PopularAdapter()
         recyclerView.adapter = movieAdapter
 
-        viewModel.nowShowing.observe(this, Observer<PagedList<PopularTable>> {
+        viewModel.nowShowing.observe(this, Observer<PagedList<MoviesTable>> {
             movieAdapter.submitList(it!!)
         })
 

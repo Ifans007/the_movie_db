@@ -3,14 +3,17 @@ package com.example.themoviedb.fragments.popular.inflater
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
-import com.example.themoviedb.database.cache.PopularCache
-import com.example.themoviedb.database.entities.PopularTable
-import com.example.themoviedb.retrofitservice.requests.models.GetRequest
+import com.example.themoviedb.database.cache.MoviesCache
+import com.example.themoviedb.database.entities.MoviesTable
+import com.example.themoviedb.retrofitservice.requests.GetRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
-class PopularBoundaryCallbacks(private val popularCache: PopularCache) : PagedList.BoundaryCallback<PopularTable>() {
+class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
 
-    private var lastRequestedPage = (popularCache.getAllItemsInPopular() / 2) + 1
+    private var lastRequestedPage = 0
 
     private val _networkErrors = MutableLiveData<String>()
 
@@ -19,65 +22,47 @@ class PopularBoundaryCallbacks(private val popularCache: PopularCache) : PagedLi
 
     private var isRequestInProgress = false
 
+    private val moviesCache = MoviesCache
+
     override fun onZeroItemsLoaded() {
+        lastRequestedPage = 1
         requestAndSavePopularData()
     }
 
-    override fun onItemAtEndLoaded(itemAtEnd: PopularTable) {
+    override fun onItemAtEndLoaded(itemAtEnd: MoviesTable) {
+        lastRequestedPage++
         requestAndSavePopularData()
     }
 
     private fun requestAndSavePopularData() {
-        if (isRequestInProgress) return
+        runBlocking {
+            launch(Dispatchers.IO) {
+                startRequest()
+            }
+        }
+    }
 
-        isRequestInProgress = true
-
+    private suspend fun startRequest() {
         GetRequest.getPopularMovies(lastRequestedPage,
-            { movierequest ->
-                val popularTableList: MutableList<PopularTable> = mutableListOf()
-                for (i in 0 until movierequest.results!!.size){
-                    val popularTable = PopularTable()
-                    val movie =  movierequest.results!![i]
-                    popularTable.movieId = movie.id
-                    popularTable.voteCount = movie.voteCount
-                    popularTable.video = movie.video
-                    popularTable.voteAverage = movie.voteAverage
-                    popularTable.title = movie.title
-                    popularTable.popularity = movie.popularity
-                    popularTable.posterPath = movie.posterPath
-                    popularTable.originalLanguage = movie.originalLanguage
-                    popularTable.originalTitle = movie.originalTitle
-                    popularTable.backdropPath = movie.backdropPath
-                    popularTable.adult = movie.adult
-                    popularTable.overview = movie.overview
-                    popularTable.releaseDate = movie.releaseDate
-                    for (j in 0 until movie.genreIds!!.size) {
-                        if(j == movie.genreIds!!.size-1)
-                            movie.genreString += getGenre(
-                                movie.genreIds!!.get(j)
-                            )
-                        else
-                            movie.genreString += getGenre(
-                                movie.genreIds!!.get(j)
-                            ) +", "
-                    }
-                    popularTable.genreString = movie.genreString
-                    popularTable.contentType = CONTENT_SIMILAR
-                    popularTable.timeAdded = Date().time
+            { movieRequest ->
 
-                    if (popularTable.backdropPath.isNullOrEmpty()) popularTable.backdropPath = RANDOM_PATH
-                    if (popularTable.posterPath.isNullOrEmpty()) popularTable.posterPath = RANDOM_PATH
-                    popularTableList.add(popularTable)
+                val popularMoviesIdList: MutableList<Int> = mutableListOf()
+
+                for (i in 0 until movieRequest.results!!.size) {
+                    val movie =  movieRequest.results!![i]
+                    popularMoviesIdList.add(movie.id!!)
                 }
-                popularCache.insert(popularTableList,{
-                    lastRequestedPage++
-                    isRequestInProgress = false
-                })
+
+                moviesCache.insertMoviesList(
+                    popularMoviesIdList,
+                    { error -> _networkErrors.postValue(error)},
+                    { lastRequestedPage++
+                    }
+                )
+
             }, { error ->
                 _networkErrors.postValue(error)
-                isRequestInProgress = false
             })
-
     }
 
     companion object {
@@ -98,7 +83,7 @@ class PopularBoundaryCallbacks(private val popularCache: PopularCache) : PagedLi
             genreMap.put(9648, "Mystery")
             genreMap.put(10749, "Romance")
             genreMap.put(878, "Science Fiction")
-            genreMap.put(10770, "TV Movie")
+            genreMap.put(10770, "TV PopularMoviesModel")
             genreMap.put(53, "Thriller")
             genreMap.put(10752, "War")
             genreMap.put(37, "Western")

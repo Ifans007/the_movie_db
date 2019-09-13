@@ -5,16 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
-import com.example.themoviedb.database.databaseresults.PopularResults
-import com.example.themoviedb.database.entities.PopularTable
+import com.example.themoviedb.database.databaseresults.MoviesResults
+import com.example.themoviedb.database.entities.MoviesTable
 import com.example.themoviedb.database.repositories.PopularRepository
 
 class PopularViewModel(private val repository: PopularRepository) : ViewModel() {
 
     private val queryLiveData = MutableLiveData<String>()
-    private val popularResult: LiveData<PopularResults> = Transformations.map(queryLiveData, { repository.popular() })
+    private val popularResult: LiveData<MoviesResults> = Transformations.map(queryLiveData, { repository.popular() })
 
-    val nowShowing: LiveData<PagedList<PopularTable>> = Transformations.switchMap(popularResult) { it.data }
+    val nowShowing: LiveData<PagedList<MoviesTable>> = Transformations.switchMap(popularResult) { it.data }
     val networkErrors: LiveData<String> = Transformations.switchMap(popularResult) { it.networkErrors }
 
     fun getPopular(region: String) {

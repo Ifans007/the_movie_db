@@ -2,7 +2,7 @@ package com.example.themoviedb.retrofitservice.requests.models
 
 import com.google.gson.annotations.SerializedName
 
-class Movie {
+class PopularMoviesModel {
 
     @SerializedName("vote_count") var voteCount: Int? = null
     @SerializedName("id") var id: Int? = null

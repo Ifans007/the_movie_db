@@ -4,15 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.themoviedb.database.dao.PopularDao
-import com.example.themoviedb.database.entities.PopularTable
+import com.example.themoviedb.database.dao.MoviesDao
+import com.example.themoviedb.database.dao.additions.*
+import com.example.themoviedb.database.entities.MoviesTable
 
-@Database(entities = [PopularTable::class], version = 1, exportSchema = false)
+@Database(entities = [MoviesTable::class], version = 1, exportSchema = false)
 
 abstract class DatabaseApp : RoomDatabase() {
 
     companion object {
-        private val DATABASE_NAME: String = "movie"
+        private val DATABASE_NAME: String = "TheMovieDB"
 
         @Volatile
         private var instance: DatabaseApp? = null
@@ -30,5 +31,10 @@ abstract class DatabaseApp : RoomDatabase() {
         }
     }
 
-    abstract fun popularDao(): PopularDao
+    abstract fun moviesDao(): MoviesDao
+    abstract fun belongsToCollectionDao(): BelongsToCollectionDao
+    abstract fun genreDao(): GenreDao
+    abstract fun productionCompanyDao(): ProductionCompanyDao
+    abstract fun productionCountryDao(): ProductionCountryDao
+    abstract fun spokenLanguageDao(): SpokenLanguageDao
 }
