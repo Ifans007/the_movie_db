@@ -3,7 +3,6 @@ package com.example.themoviedb.database.repositories
 import androidx.paging.LivePagedListBuilder
 import com.example.themoviedb.database.cache.MoviesCache
 import com.example.themoviedb.database.databaseresults.MoviesResults
-import com.example.themoviedb.database.datasource.MoviesDataSourceFactory
 import com.example.themoviedb.fragments.popular.inflater.PopularBoundaryCallbacks
 
 class PopularRepository {
@@ -16,9 +15,7 @@ class PopularRepository {
 
         val boundaryCallback = PopularBoundaryCallbacks()
 
-//        val dataSourceFactory = movieCache.getByIdForDataSource(0)
-
-        val dataSourceFactory = MoviesDataSourceFactory(boundaryCallback.popularMoviesList)
+        val dataSourceFactory = movieCache.getByIdForDataSource(0)
 
         val networkErrors = boundaryCallback.networkErrors
 

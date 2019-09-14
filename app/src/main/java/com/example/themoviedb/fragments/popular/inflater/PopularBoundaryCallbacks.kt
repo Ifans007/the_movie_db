@@ -11,19 +11,6 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
 
     private var lastRequestedPage = 0
 
-
-//    private val _popularMoviesList = MutableLiveData<List<Int>>()
-//
-//    val popularMoviesList: LiveData<List<Int>>
-//        get() = _popularMoviesList
-
-
-    private var _popularMoviesList: MutableList<Int> = mutableListOf()
-
-    val popularMoviesList: List<Int>
-        get() = _popularMoviesList
-
-
     private val _networkErrors = MutableLiveData<String>()
 
     val networkErrors: LiveData<String>
@@ -58,8 +45,6 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
                     { error -> _networkErrors.postValue(error)},
                     { lastRequestedPage++ }
                 )
-
-                _popularMoviesList = popularMoviesIdList
 
             }, { error ->
                 _networkErrors.postValue(error)
