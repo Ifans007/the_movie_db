@@ -16,9 +16,9 @@ object GetRequest {
                      onError: (error: String) -> Unit) {
 
         service.movieById(
+            movieId,
             TMDB_API_KEY,
             "ru-RU",
-            movieId,
             "RU")
             .enqueue(
                 object : Callback<MoviesModel> {

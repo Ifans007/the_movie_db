@@ -1,24 +1,25 @@
 package com.example.themoviedb.database.repositories
 
 import androidx.paging.LivePagedListBuilder
-import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.cache.MoviesCache
 import com.example.themoviedb.database.databaseresults.MoviesResults
+import com.example.themoviedb.database.datasource.MoviesDataSourceFactory
 import com.example.themoviedb.fragments.popular.inflater.PopularBoundaryCallbacks
 
 class PopularRepository {
 
     private val DATABASE_PAGE_SIZE = 60
 
-    private val popularDao = DatabaseApp.getInstance().moviesDao()
-    private val popularCache = MoviesCache(popularDao)
+    private val movieCache = MoviesCache
 
     fun popular(): MoviesResults {
 
-        val dataSourceFactory = popularCache.getAllPopular()
+        val boundaryCallback = PopularBoundaryCallbacks()
 
-        val boundaryCallback =
-            PopularBoundaryCallbacks(popularCache)
+//        val dataSourceFactory = movieCache.getByIdForDataSource(0)
+
+        val dataSourceFactory = MoviesDataSourceFactory(boundaryCallback.popularMoviesList)
+
         val networkErrors = boundaryCallback.networkErrors
 
         val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)

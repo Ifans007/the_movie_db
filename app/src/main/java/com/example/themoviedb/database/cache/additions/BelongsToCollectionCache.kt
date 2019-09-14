@@ -7,9 +7,11 @@ import com.example.themoviedb.retrofitservice.requests.models.BelongsToCollectio
 object BelongsToCollectionCache {
 
     fun insert(
-        databaseMovies: BelongsToCollectionDao,
-        belongsToCollection: BelongsToCollection
+        belongsToCollectionDao: BelongsToCollectionDao,
+        belongsToCollection: BelongsToCollection,
+        returnId: (id: Int) -> Unit
     ) {
+
         val belongsToCollectionTable = BelongsToCollectionTable()
 
         belongsToCollectionTable.id             = belongsToCollection.id
@@ -17,6 +19,8 @@ object BelongsToCollectionCache {
         belongsToCollectionTable.posterPath     = belongsToCollection.posterPath
         belongsToCollectionTable.backdropPath   = belongsToCollection.backdropPath
 
-        databaseMovies.
+        belongsToCollectionDao.insert(belongsToCollectionTable)
+
+        returnId(belongsToCollection.id)
     }
 }

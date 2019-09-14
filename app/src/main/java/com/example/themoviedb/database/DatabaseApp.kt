@@ -7,8 +7,16 @@ import androidx.room.RoomDatabase
 import com.example.themoviedb.database.dao.MoviesDao
 import com.example.themoviedb.database.dao.additions.*
 import com.example.themoviedb.database.entities.MoviesTable
+import com.example.themoviedb.database.entities.additions.*
 
-@Database(entities = [MoviesTable::class], version = 1, exportSchema = false)
+@Database(entities = [
+    MoviesTable::class,
+    BelongsToCollectionTable::class,
+    GenreTable::class,
+    ProductionCompanyTable::class,
+    ProductionCountryTable::class,
+    SpokenLanguageTable::class],
+    version = 1, exportSchema = false)
 
 abstract class DatabaseApp : RoomDatabase() {
 

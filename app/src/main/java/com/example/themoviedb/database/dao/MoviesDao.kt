@@ -10,8 +10,11 @@ import com.example.themoviedb.database.entities.MoviesTable
 @Dao
 interface MoviesDao {
 
-    @Query("SELECT * FROM MoviesTable WHERE movieId = :movieId")
-    fun getByIdForDataSource(movieId: Int): DataSource<Int, MoviesTable>
+    @Query("SELECT * FROM MoviesTable ORDER BY popularity DESC, voteCount Desc")
+    fun getByIdForDataSource(): DataSource.Factory<Int, MoviesTable>
+
+//    @Query("SELECT * FROM MoviesTable WHERE movieId = :movieId")
+//    fun getByIdForDataSource(movieId: Int): DataSource.Factory<Int, MoviesTable>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(movie: MoviesTable)

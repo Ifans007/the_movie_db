@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "ProductionCountryTable")
 class ProductionCountryTable(@PrimaryKey
-                             var code: String? = null,
+                             var code: String = "",
                              var name: String? = null
 ) {
     override fun equals(other: Any?): Boolean {

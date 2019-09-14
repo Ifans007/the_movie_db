@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.themoviedb.R
-import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.MoviesTable
 import com.example.themoviedb.database.repositories.PopularRepository
 import com.example.themoviedb.fragments.popular.inflater.PopularAdapter
@@ -49,7 +48,7 @@ class PopularMoviesFragment : Fragment() {
 
         getPopularData()
 
-        DatabaseApp.getInstance().additionsDao()
+//        DatabaseApp.getInstance().additionsDao()
 
         return mainView
     }

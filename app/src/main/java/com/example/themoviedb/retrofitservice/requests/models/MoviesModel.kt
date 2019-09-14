@@ -13,7 +13,7 @@ class MoviesModel {
     @SerializedName("budget")
     val budget: Int? = null
     @SerializedName("genres")
-    val genres: List<Genre>? = null
+    val genresList: List<Genre>? = null
     @SerializedName("homepage")
     val homepage: String? = null
     @SerializedName("id")
@@ -31,9 +31,9 @@ class MoviesModel {
     @SerializedName("poster_path")
     val posterPath: String? = null
     @SerializedName("production_companies")
-    val productionCompanies: List<ProductionCompany>? = null
+    val productionCompaniesList: List<ProductionCompany>? = null
     @SerializedName("production_countries")
-    val productionCountries: List<ProductionCountry>? = null
+    val productionCountriesList: List<ProductionCountry>? = null
     @SerializedName("release_date")
     val releaseDate: String? = null
     @SerializedName("revenue")
@@ -41,7 +41,7 @@ class MoviesModel {
     @SerializedName("runtime")
     val runtime: Int? = null
     @SerializedName("spoken_languages")
-    val spokenLanguages: List<SpokenLanguage>? = null
+    val spokenLanguagesList: List<SpokenLanguage>? = null
     @SerializedName("status")
     val status: String? = null
     @SerializedName("tagline")
@@ -82,7 +82,7 @@ class ProductionCompany(
     @SerializedName("name")
     val name: String,
     @SerializedName("origin_country")
-    val origin_country: String
+    val originCountry: String
 )
 
 class ProductionCountry(
