@@ -6,10 +6,9 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.themoviedb.R
 import com.example.themoviedb.database.entities.MoviesTable
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
 
 class PopularViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
 
@@ -34,22 +33,22 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
     }
 
 
-    fun bindPopularData(movie: MoviesTable?) {
+    fun bindPopularData(movieId: PopularMoviesTable?) {
 
         if (movie == null) {
             return
         } else {
 
-            this.movie = movie
+//            this.movie = movie
 
-            movieTitle.text = movie.title
+            movieTitle.text = movieId.toString()
 //            movieRating.rating = movie.voteAverage!!.div(2)
-            movieReleaseDate.text = movie.releaseDate!!
-            movieOverView.text = movie.overview
+//            movieReleaseDate.text = movie.releaseDate!!
+//            movieOverView.text = movie.overview
 //            movieType.text = movie.genreString
 
-            Glide.with(context).load(buildImageUrl(movie.posterPath!!)).thumbnail(0.05f)
-                .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
+//            Glide.with(context).load(buildImageUrl(movie.posterPath!!)).thumbnail(0.05f)
+//                .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
         }
 
     }

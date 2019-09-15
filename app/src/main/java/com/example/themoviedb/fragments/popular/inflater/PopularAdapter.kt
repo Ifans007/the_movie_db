@@ -7,9 +7,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.MoviesTable
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
 
-class PopularAdapter : PagedListAdapter<MoviesTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
+class PopularAdapter : PagedListAdapter<PopularMoviesTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -23,7 +23,7 @@ class PopularAdapter : PagedListAdapter<MoviesTable, RecyclerView.ViewHolder>(RE
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val movie: MoviesTable? = getItem(position)
+        val movie: PopularMoviesTable? = getItem(position)
 
         if (movie != null) {
             val movieViewHolder = holder as PopularViewHolder
@@ -34,12 +34,12 @@ class PopularAdapter : PagedListAdapter<MoviesTable, RecyclerView.ViewHolder>(RE
     }
 
     companion object {
-        private val REPOSITORY_COMPARATOR = object : DiffUtil.ItemCallback<MoviesTable>() {
-            override fun areItemsTheSame(oldItem: MoviesTable, newItem: MoviesTable): Boolean {
+        private val REPOSITORY_COMPARATOR = object : DiffUtil.ItemCallback<PopularMoviesTable>() {
+            override fun areItemsTheSame(oldItem: PopularMoviesTable, newItem: PopularMoviesTable): Boolean {
                 return oldItem.movieId == newItem.movieId
             }
 
-            override fun areContentsTheSame(oldItem: MoviesTable, newItem: MoviesTable): Boolean {
+            override fun areContentsTheSame(oldItem: PopularMoviesTable, newItem: PopularMoviesTable): Boolean {
                 return oldItem == newItem
             }
         }

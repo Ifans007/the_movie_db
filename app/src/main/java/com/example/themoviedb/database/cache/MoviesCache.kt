@@ -1,6 +1,5 @@
 package com.example.themoviedb.database.cache
 
-import androidx.paging.DataSource
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.cache.additions.*
 import com.example.themoviedb.database.entities.MoviesTable
@@ -19,10 +18,6 @@ object MoviesCache {
     private val productionCompanyCache   = ProductionCompanyCache
     private val productionCountryCache   = ProductionCountryCache
     private val spokenLanguageCache      = SpokenLanguageCache
-
-    fun getByIdForDataSource(movieId: Int): DataSource.Factory<Int, MoviesTable> {
-        return databaseMovies.moviesDao().getByIdForDataSource()
-    }
 
     fun insertMoviesList(
         listMovies: List<Int>,

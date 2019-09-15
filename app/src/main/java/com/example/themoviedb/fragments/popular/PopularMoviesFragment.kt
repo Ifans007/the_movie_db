@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.MoviesTable
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
 import com.example.themoviedb.database.repositories.PopularRepository
 import com.example.themoviedb.fragments.popular.inflater.PopularAdapter
 import com.example.themoviedb.fragments.popular.inflater.PopularViewModel
@@ -72,7 +72,7 @@ class PopularMoviesFragment : Fragment() {
         movieAdapter = PopularAdapter()
         recyclerView.adapter = movieAdapter
 
-        viewModel.nowShowing.observe(this, Observer<PagedList<MoviesTable>> {
+        viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesTable>> {
             movieAdapter.submitList(it!!)
         })
 

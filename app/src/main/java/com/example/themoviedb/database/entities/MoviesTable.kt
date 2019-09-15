@@ -22,7 +22,7 @@ class MoviesTable(@PrimaryKey
                   var productionCompaniesList: String? = null,
                   var productionCountriesList: String? = null,
                   var releaseDate: String? = null,
-                  var revenue: Int? = null,
+                  var revenue: Long? = null,
                   var runtime: Int? = null,
                   var spokenLanguagesList: String? = null,
                   var status: String? = null,

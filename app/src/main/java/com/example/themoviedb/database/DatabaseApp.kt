@@ -6,8 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.themoviedb.database.dao.MoviesDao
 import com.example.themoviedb.database.dao.additions.*
+import com.example.themoviedb.database.dao.moviescategory.PopularMoviesDao
 import com.example.themoviedb.database.entities.MoviesTable
 import com.example.themoviedb.database.entities.additions.*
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
 
 @Database(entities = [
     MoviesTable::class,
@@ -15,7 +17,9 @@ import com.example.themoviedb.database.entities.additions.*
     GenreTable::class,
     ProductionCompanyTable::class,
     ProductionCountryTable::class,
-    SpokenLanguageTable::class],
+    SpokenLanguageTable::class,
+
+    PopularMoviesTable::class],
     version = 1, exportSchema = false)
 
 abstract class DatabaseApp : RoomDatabase() {
@@ -45,4 +49,6 @@ abstract class DatabaseApp : RoomDatabase() {
     abstract fun productionCompanyDao(): ProductionCompanyDao
     abstract fun productionCountryDao(): ProductionCountryDao
     abstract fun spokenLanguageDao(): SpokenLanguageDao
+
+    abstract fun popularMoviesDao(): PopularMoviesDao
 }

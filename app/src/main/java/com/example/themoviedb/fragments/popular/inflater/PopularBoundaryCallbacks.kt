@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.example.themoviedb.database.cache.MoviesCache
-import com.example.themoviedb.database.entities.MoviesTable
+import com.example.themoviedb.database.cache.moviescategory.PopularMoviesCache
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
 import com.example.themoviedb.retrofitservice.requests.GetRequest
 
-class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
+class PopularBoundaryCallbacks : PagedList.BoundaryCallback<PopularMoviesTable>() {
 
     private var lastRequestedPage = 0
 
@@ -16,6 +17,8 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
     val networkErrors: LiveData<String>
         get() = _networkErrors
 
+    private val popularMoviesCache = PopularMoviesCache
+
     private val moviesCache = MoviesCache
 
     override fun onZeroItemsLoaded() {
@@ -23,7 +26,7 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
         requestAndSavePopularData()
     }
 
-    override fun onItemAtEndLoaded(itemAtEnd: MoviesTable) {
+    override fun onItemAtEndLoaded(itemAtEnd: PopularMoviesTable) {
         lastRequestedPage++
         requestAndSavePopularData()
     }
@@ -39,6 +42,8 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<MoviesTable>() {
                     val movie =  movieRequest.results!![i]
                     popularMoviesIdList.add(movie.id!!)
                 }
+
+                popularMoviesCache.insert(popularMoviesIdList)
 
                 moviesCache.insertMoviesList(
                     popularMoviesIdList,
