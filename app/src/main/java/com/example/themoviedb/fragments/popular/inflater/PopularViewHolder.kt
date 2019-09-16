@@ -6,9 +6,15 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.MoviesTable
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
+import com.example.themoviedb.database.DatabaseApp
+import com.example.themoviedb.database.entities.CommonInfoMoviesTable
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class PopularViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
 
@@ -18,39 +24,53 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
     var movieReleaseDate: TextView
     var moviePoster: ImageView
     var movieOverView: TextView
-    private var movie: MoviesTable? = null
 
     init{
-        movieTitle = itemView!!.findViewById(R.id.single_item_movie_title)
+        movieTitle = itemView.findViewById(R.id.single_item_movie_title)
         movieRating = itemView.findViewById(R.id.single_item_movie_rating)
         movieType = itemView.findViewById(R.id.single_item_movie_type)
         movieReleaseDate = itemView.findViewById(R.id.single_item_movie_release_date)
         moviePoster = itemView.findViewById(R.id.single_item_movie_image)
         movieOverView = itemView.findViewById(R.id.single_item_movie_overview)
 
+    }
 
+    fun bindPopularData(
+        popularMoviesIdTable: PopularMoviesIdTable,
+        databaseApp: DatabaseApp
+    ) {
+
+        runBlocking {
+            val movieDeferred = async(Dispatchers.IO) { getMovie(popularMoviesIdTable, databaseApp) }.await()
+            fillView(movieDeferred)
+        }
 
     }
 
+    private fun getMovie(
+        popularMoviesIdTable: PopularMoviesIdTable,
+        databaseApp: DatabaseApp
+    ): CommonInfoMoviesTable? {
 
-    fun bindPopularData(movieId: PopularMoviesTable?) {
+        return databaseApp.commonInfoMoviesDao().getById(popularMoviesIdTable.movieId!!)
+    }
 
-        if (movie == null) {
-            return
-        } else {
 
-//            this.movie = movie
+    private fun fillView(movie: CommonInfoMoviesTable?) {
 
-            movieTitle.text = movieId.toString()
-//            movieRating.rating = movie.voteAverage!!.div(2)
-//            movieReleaseDate.text = movie.releaseDate!!
-//            movieOverView.text = movie.overview
-//            movieType.text = movie.genreString
+        if (movie != null) {
 
-//            Glide.with(context).load(buildImageUrl(movie.posterPath!!)).thumbnail(0.05f)
-//                .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
+            movieTitle.text = movie.title
+            movieRating.rating = movie.voteAverage!!.div(2)
+            movieReleaseDate.text = movie.releaseDate!!
+            movieOverView.text = movie.overview
+
+            movieType.text = movie.genres
+
+            Glide.with(context).load(buildImageUrl(movie.posterPath!!)).thumbnail(0.05f)
+                .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
+
         }
-
     }
 
     private fun buildImageUrl(path: String): String {

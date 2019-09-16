@@ -4,22 +4,28 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.themoviedb.database.dao.MoviesDao
-import com.example.themoviedb.database.dao.additions.*
+import com.example.themoviedb.database.dao.CommonInfoMoviesDao
+import com.example.themoviedb.database.dao.detailsinfo.DetailsInfoMoviesDao
+import com.example.themoviedb.database.dao.detailsinfo.additions.*
 import com.example.themoviedb.database.dao.moviescategory.PopularMoviesDao
-import com.example.themoviedb.database.entities.MoviesTable
-import com.example.themoviedb.database.entities.additions.*
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
+import com.example.themoviedb.database.entities.CommonInfoMoviesTable
+import com.example.themoviedb.database.entities.detailsinfo.DetailsInfoMoviesTable
+import com.example.themoviedb.database.entities.detailsinfo.additions.*
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 
 @Database(entities = [
-    MoviesTable::class,
+
+    CommonInfoMoviesTable::class,
+
+    PopularMoviesIdTable::class,
+
+    DetailsInfoMoviesTable::class,
+
     BelongsToCollectionTable::class,
     GenreTable::class,
     ProductionCompanyTable::class,
     ProductionCountryTable::class,
-    SpokenLanguageTable::class,
-
-    PopularMoviesTable::class],
+    SpokenLanguageTable::class],
     version = 1, exportSchema = false)
 
 abstract class DatabaseApp : RoomDatabase() {
@@ -43,12 +49,17 @@ abstract class DatabaseApp : RoomDatabase() {
         }
     }
 
-    abstract fun moviesDao(): MoviesDao
+    abstract fun commonInfoMoviesDao(): CommonInfoMoviesDao
+
+    abstract fun popularMoviesDao(): PopularMoviesDao
+
+    abstract fun detailsInfoMoviesDao(): DetailsInfoMoviesDao
+
     abstract fun belongsToCollectionDao(): BelongsToCollectionDao
     abstract fun genreDao(): GenreDao
     abstract fun productionCompanyDao(): ProductionCompanyDao
     abstract fun productionCountryDao(): ProductionCountryDao
     abstract fun spokenLanguageDao(): SpokenLanguageDao
 
-    abstract fun popularMoviesDao(): PopularMoviesDao
+
 }

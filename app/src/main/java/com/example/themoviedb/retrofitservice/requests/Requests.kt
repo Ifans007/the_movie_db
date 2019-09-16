@@ -1,8 +1,8 @@
 package com.example.themoviedb.retrofitservice.requests
 
-import com.example.themoviedb.retrofitservice.requests.models.MoviesModel
-import com.example.themoviedb.retrofitservice.requests.models.PopularMoviesModel
-import com.google.gson.annotations.SerializedName
+import com.example.themoviedb.retrofitservice.requests.models.GenresRequest
+import com.example.themoviedb.retrofitservice.requests.models.MoviesRequest
+import com.example.themoviedb.retrofitservice.requests.models.detailsinfo.DetailsInfoMoviesModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,7 +15,7 @@ interface Requests {
                   @Query("api_key") apiKey: String,
                   @Query("language") language: String,
                   @Query("region") region: String
-    ): Call<MoviesModel>
+    ): Call<DetailsInfoMoviesModel>
 
 
     @GET("movie/popular")
@@ -23,13 +23,13 @@ interface Requests {
                       @Query("language") language: String,
                       @Query("page") pageNumber: Int,
                       @Query("region") region: String
-    ): Call<MovieRequest>
+    ): Call<MoviesRequest>
+
+
+    @GET("genre/movie/list")
+    fun genresList(@Query("api_key") apiKey: String,
+                   @Query("language") language: String
+    ): Call<GenresRequest>
 
 }
-
-class MovieRequest(
-    @SerializedName("total_pages") var totalPages: Int = 0,
-    @SerializedName("page") var page: Int = 0,
-    @SerializedName("results") var results: List<PopularMoviesModel>? = null
-)
 

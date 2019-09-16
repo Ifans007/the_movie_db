@@ -14,14 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 import com.example.themoviedb.database.repositories.PopularRepository
 import com.example.themoviedb.fragments.popular.inflater.PopularAdapter
 import com.example.themoviedb.fragments.popular.inflater.PopularViewModel
 import com.example.themoviedb.fragments.popular.inflater.ViewModelPopularFactory
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 
 class PopularMoviesFragment : Fragment() {
@@ -48,15 +45,13 @@ class PopularMoviesFragment : Fragment() {
 
         getPopularData()
 
-//        DatabaseApp.getInstance().additionsDao()
-
         return mainView
     }
 
     private fun initView() {
         recyclerView = mainView.findViewById(R.id.fragment_popular_movies_recycler_view)
         swipeRefreshLayout = mainView.findViewById(R.id.fragment_popular_movies_swipe_refresh)
-
+//        swipeRefreshLayout.isRefreshing = true
     }
 
     private fun initRecyclerView() {
@@ -72,12 +67,15 @@ class PopularMoviesFragment : Fragment() {
         movieAdapter = PopularAdapter()
         recyclerView.adapter = movieAdapter
 
-        viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesTable>> {
+        viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesIdTable>> {
             movieAdapter.submitList(it!!)
+//            if (it.size != 0) {
+//                swipeRefreshLayout.isRefreshing = false
+//            }
         })
 
         viewModel.networkErrors.observe(this, Observer<String> {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         })
     }
 
@@ -89,28 +87,32 @@ class PopularMoviesFragment : Fragment() {
 
     private fun setSwipeRefreshLayoutListener() {
         swipeRefreshLayout.setOnRefreshListener {
+
             refresh()
-            swipeRefreshLayout.isRefreshing = false
+
+
+//            runBlocking(Dispatchers.IO) {
+//                launch (Dispatchers.IO) {
+//
+//                    refresh()
+//
+//                }.join()
+//            }
+
+//            swipeRefreshLayout.isEnabled = false
+            Toast.makeText(context, "It still doesn't work.", Toast.LENGTH_SHORT).show()
+
+
         }
     }
 
     private fun refresh() {
-        swipeRefreshLayout.isEnabled = false
-        Toast.makeText(context, "It still doesn't work.", Toast.LENGTH_SHORT).show()
-        runBlocking() {
-            async () {
-                delay(500)
-            }.await()
-        }
-        swipeRefreshLayout.isEnabled = true
     }
 
     private fun getPopularData() {
         viewModel.getPopular("RU")
 
         movieAdapter.submitList(null)
-        swipeRefreshLayout.isRefreshing = false
+//        swipeRefreshLayout.isRefreshing = false
     }
-
-
 }

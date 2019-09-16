@@ -1,15 +1,15 @@
 package com.example.themoviedb.database.repositories
 
 import androidx.paging.LivePagedListBuilder
-import com.example.themoviedb.database.cache.moviescategory.PopularMoviesCache
+import com.example.themoviedb.database.cache.moviescategory.PopularMoviesIdListCache
 import com.example.themoviedb.database.databaseresults.MoviesResults
 import com.example.themoviedb.fragments.popular.inflater.PopularBoundaryCallbacks
 
 class PopularRepository {
 
-    private val DATABASE_PAGE_SIZE = 60
+    private val DATABASE_PAGE_SIZE = 20
 
-    private val popularMoviesCache = PopularMoviesCache
+    private val popularMoviesCache = PopularMoviesIdListCache
 
     fun popular(): MoviesResults {
 

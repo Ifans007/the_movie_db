@@ -1,7 +1,9 @@
 package com.example.themoviedb.retrofitservice.requests
 
 import com.example.themoviedb.retrofitservice.RetrofitClient
-import com.example.themoviedb.retrofitservice.requests.models.MoviesModel
+import com.example.themoviedb.retrofitservice.requests.models.GenresRequest
+import com.example.themoviedb.retrofitservice.requests.models.MoviesRequest
+import com.example.themoviedb.retrofitservice.requests.models.detailsinfo.DetailsInfoMoviesModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,8 +13,51 @@ val TMDB_API_KEY = "6e28454b2acfbee3d6116e0792901bd7"
 
 object GetRequest {
 
+    fun getGenresList(onSuccess: (movie: GenresRequest) -> Unit,
+                      onError: (error: String) -> Unit) {
+
+//        runBlocking {
+//
+//            launch(Dispatchers.Main) {
+
+        service.genresList(
+            TMDB_API_KEY,
+            "ru-RU")
+            .enqueue(
+
+
+
+                object : Callback<GenresRequest> {
+
+
+                    override fun onFailure(call: Call<GenresRequest>, t: Throwable) {
+                        onError(t.message ?: "unknown error")
+                    }
+
+                    override fun onResponse(call: Call<GenresRequest>, response: Response<GenresRequest>) {
+                        if (response.isSuccessful) {
+                            val genreModel = response.body() ?: GenresRequest()
+                            onSuccess(genreModel)
+                        } else {
+                            onError(response.errorBody()?.string() ?: "Unknown error")
+                        }
+                    }
+
+
+
+                }
+
+
+
+            )
+
+//            }.join()
+//        }
+
+    }
+
     fun getMovieById(movieId: Int,
-                     onSuccess: (movie: MoviesModel) -> Unit,
+                     onSuccess: (movie: DetailsInfoMoviesModel) -> Unit,
                      onError: (error: String) -> Unit) {
 
         service.movieById(
@@ -21,14 +66,14 @@ object GetRequest {
             "ru-RU",
             "RU")
             .enqueue(
-                object : Callback<MoviesModel> {
-                    override fun onFailure(call: Call<MoviesModel>, t: Throwable) {
+                object : Callback<DetailsInfoMoviesModel> {
+                    override fun onFailure(call: Call<DetailsInfoMoviesModel>, t: Throwable) {
                         onError(t.message ?: "unknown error")
                     }
 
-                    override fun onResponse(call: Call<MoviesModel>, response: Response<MoviesModel>) {
+                    override fun onResponse(call: Call<DetailsInfoMoviesModel>, response: Response<DetailsInfoMoviesModel>) {
                         if (response.isSuccessful) {
-                            val movieRequest = response.body() ?: MoviesModel()
+                            val movieRequest = response.body() ?: DetailsInfoMoviesModel()
                             onSuccess(movieRequest)
                         } else {
                             onError(response.errorBody()?.string() ?: "Unknown error")
@@ -41,7 +86,7 @@ object GetRequest {
 
     fun getPopularMovies(
         page: Int,
-        onSuccess: (movieRequest: MovieRequest) -> Unit,
+        onSuccess: (moviesRequest: MoviesRequest) -> Unit,
         onError: (error: String) -> Unit) {
 
         service.popularMovies(
@@ -50,14 +95,14 @@ object GetRequest {
             page,
             "RU")
             .enqueue(
-                object : Callback<MovieRequest> {
-                    override fun onFailure(call: Call<MovieRequest>, t: Throwable) {
+                object : Callback<MoviesRequest> {
+                    override fun onFailure(call: Call<MoviesRequest>, t: Throwable) {
                         onError(t.message ?: "unknown error")
                     }
 
-                    override fun onResponse(call: Call<MovieRequest>, response: Response<MovieRequest>) {
+                    override fun onResponse(call: Call<MoviesRequest>, response: Response<MoviesRequest>) {
                         if (response.isSuccessful) {
-                            val movieRequest = response.body() ?: MovieRequest()
+                            val movieRequest = response.body() ?: MoviesRequest()
                             onSuccess(movieRequest)
                         } else {
                             onError(response.errorBody()?.string() ?: "Unknown error")

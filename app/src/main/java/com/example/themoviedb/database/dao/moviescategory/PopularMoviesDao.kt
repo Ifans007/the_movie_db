@@ -5,15 +5,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 
 @Dao
 interface PopularMoviesDao {
 
-    @Query("SELECT * FROM PopularMoviesTable")
-    fun getPopularMovies(): DataSource.Factory<Int, PopularMoviesTable>
+    @Query("SELECT * FROM PopularMoviesIdTable ORDER BY counter ASC")
+    fun getPopularMovies(): DataSource.Factory<Int, PopularMoviesIdTable>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(movie: PopularMoviesTable)
-
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(movies: List<PopularMoviesIdTable>)
 }

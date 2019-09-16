@@ -7,9 +7,12 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesTable
+import com.example.themoviedb.database.DatabaseApp
+import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 
-class PopularAdapter : PagedListAdapter<PopularMoviesTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
+class PopularAdapter : PagedListAdapter<PopularMoviesIdTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
+
+    private val databaseApp = DatabaseApp.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -23,23 +26,23 @@ class PopularAdapter : PagedListAdapter<PopularMoviesTable, RecyclerView.ViewHol
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val movie: PopularMoviesTable? = getItem(position)
+        val popularMoviesIdTable: PopularMoviesIdTable? = getItem(position)
 
-        if (movie != null) {
+        if (popularMoviesIdTable != null) {
             val movieViewHolder = holder as PopularViewHolder
-            movieViewHolder.bindPopularData(movie)
+            movieViewHolder.bindPopularData(popularMoviesIdTable, databaseApp)
         } else {
             notifyItemRemoved(position)
         }
     }
 
     companion object {
-        private val REPOSITORY_COMPARATOR = object : DiffUtil.ItemCallback<PopularMoviesTable>() {
-            override fun areItemsTheSame(oldItem: PopularMoviesTable, newItem: PopularMoviesTable): Boolean {
+        private val REPOSITORY_COMPARATOR = object : DiffUtil.ItemCallback<PopularMoviesIdTable>() {
+            override fun areItemsTheSame(oldItem: PopularMoviesIdTable, newItem: PopularMoviesIdTable): Boolean {
                 return oldItem.movieId == newItem.movieId
             }
 
-            override fun areContentsTheSame(oldItem: PopularMoviesTable, newItem: PopularMoviesTable): Boolean {
+            override fun areContentsTheSame(oldItem: PopularMoviesIdTable, newItem: PopularMoviesIdTable): Boolean {
                 return oldItem == newItem
             }
         }

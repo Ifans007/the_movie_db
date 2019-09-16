@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
-import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.fragments.MovieViewPagerAdapter
 import com.example.themoviedb.fragments.popular.PopularMoviesFragment
 import com.google.android.material.tabs.TabLayout
@@ -22,13 +21,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        DatabaseApp.getInstance(applicationContext)
+        InitDatabase(this)
 
         initView()
         setupToolBar()
         setupViewPager()
         setupTabLayout()
     }
+
 
     private fun initView() {
         toolbar = findViewById(R.id.activity_main_toolbar)
