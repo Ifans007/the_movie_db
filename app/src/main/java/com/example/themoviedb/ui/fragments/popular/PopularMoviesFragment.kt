@@ -1,5 +1,6 @@
-package com.example.themoviedb.fragments.popular
+package com.example.themoviedb.ui.fragments.popular
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,12 +17,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.themoviedb.R
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 import com.example.themoviedb.database.repositories.PopularRepository
-import com.example.themoviedb.fragments.popular.inflater.PopularAdapter
-import com.example.themoviedb.fragments.popular.inflater.PopularViewModel
-import com.example.themoviedb.fragments.popular.inflater.ViewModelPopularFactory
+import com.example.themoviedb.ui.OnClickListenerMovie
+import com.example.themoviedb.ui.activity.moviedescription.MovieDescriptionActivity
+import com.example.themoviedb.ui.fragments.popular.inflater.PopularAdapter
+import com.example.themoviedb.ui.fragments.popular.inflater.PopularViewModel
+import com.example.themoviedb.ui.fragments.popular.inflater.ViewModelPopularFactory
 
 
-class PopularMoviesFragment : Fragment() {
+class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
 
     private val GRID_COLUMNS_PORTRAIT = 1
     private val GRID_COLUMNS_LANDSCAPE = 2
@@ -64,7 +67,7 @@ class PopularMoviesFragment : Fragment() {
         )
             .get(PopularViewModel::class.java)
 
-        movieAdapter = PopularAdapter()
+        movieAdapter = PopularAdapter(this)
         recyclerView.adapter = movieAdapter
 
         viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesIdTable>> {
@@ -91,15 +94,6 @@ class PopularMoviesFragment : Fragment() {
             refresh()
 
 
-//            runBlocking(Dispatchers.IO) {
-//                launch (Dispatchers.IO) {
-//
-//                    refresh()
-//
-//                }.join()
-//            }
-
-//            swipeRefreshLayout.isEnabled = false
             Toast.makeText(context, "It still doesn't work.", Toast.LENGTH_SHORT).show()
 
 
@@ -114,5 +108,11 @@ class PopularMoviesFragment : Fragment() {
 
         movieAdapter.submitList(null)
 //        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun onClickListenerMovie(movieId: Int) {
+        val intent = Intent(context, MovieDescriptionActivity::class.java)
+        intent.putExtra("movieId",movieId)
+        context!!.startActivity(intent)
     }
 }

@@ -14,4 +14,5 @@ interface CommonInfoMoviesDao {
 
     @Query("SELECT * FROM CommonInfoMoviesTable WHERE movieId = :movieId")
     fun getById(movieId: Int): CommonInfoMoviesTable
+
 }

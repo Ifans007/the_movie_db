@@ -13,9 +13,17 @@ class InitDatabase(private val mainActivity: MainActivity) {
 
     init {
 
-        val database = initDataBase()
+        runBlocking {
 
-        requestGenresList({request -> cacheGenresList(database, request) })
+            val database = initDataBase()
+
+            val isEmpty = async(Dispatchers.IO) { database.genreDao().getAll().isEmpty() }.await()
+
+            if (isEmpty) {
+
+                requestGenresList({request -> cacheGenresList(database, request) })
+            }
+        }
     }
 
     private fun initDataBase(): DatabaseApp {
@@ -29,7 +37,7 @@ class InitDatabase(private val mainActivity: MainActivity) {
                 finished(it)
             },
             {
-                Toast.makeText(mainActivity, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(mainActivity, "Failed to load genre list: $it.", Toast.LENGTH_SHORT).show()
                 finished(null)
             })
     }
@@ -40,13 +48,6 @@ class InitDatabase(private val mainActivity: MainActivity) {
 
             GenreCache.insert(dataBase.genreDao(), requestGenresList.genresList)
 
-        } else {
-
-            runBlocking {
-
-                val isEmpty = async(Dispatchers.IO) { dataBase.genreDao().getAll().isEmpty() }.await()
-                if (isEmpty) Toast.makeText(mainActivity, "Failed to load genre list", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 }

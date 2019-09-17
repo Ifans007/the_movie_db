@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.themoviedb.database.dao.CommonInfoMoviesDao
 import com.example.themoviedb.database.dao.detailsinfo.DetailsInfoMoviesDao
 import com.example.themoviedb.database.dao.detailsinfo.additions.*
-import com.example.themoviedb.database.dao.moviescategory.PopularMoviesDao
+import com.example.themoviedb.database.dao.moviescategory.PopularMoviesIdDao
 import com.example.themoviedb.database.entities.CommonInfoMoviesTable
 import com.example.themoviedb.database.entities.detailsinfo.DetailsInfoMoviesTable
 import com.example.themoviedb.database.entities.detailsinfo.additions.*
@@ -51,7 +51,7 @@ abstract class DatabaseApp : RoomDatabase() {
 
     abstract fun commonInfoMoviesDao(): CommonInfoMoviesDao
 
-    abstract fun popularMoviesDao(): PopularMoviesDao
+    abstract fun popularMoviesDao(): PopularMoviesIdDao
 
     abstract fun detailsInfoMoviesDao(): DetailsInfoMoviesDao
 

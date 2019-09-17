@@ -4,5 +4,12 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="color_gray">#E9E9E9</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_gray">#D6D6D6</color>
+    <color name="color_dark_gray">#949494</color>
+
+    <color name="translucent_scrim_top">#33000000</color>
+    <color name="translucent_scrim_top_center">#26000000</color>
+    <color name="translucent_scrim_bottom">#4D000000</color>
+    <color name="translucent_scrim_bottom_center">#40000000</color>
 </resources>

@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
-import com.example.themoviedb.fragments.MovieViewPagerAdapter
-import com.example.themoviedb.fragments.popular.PopularMoviesFragment
+import com.example.themoviedb.ui.fragments.MovieViewPagerAdapter
+import com.example.themoviedb.ui.fragments.popular.PopularMoviesFragment
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {

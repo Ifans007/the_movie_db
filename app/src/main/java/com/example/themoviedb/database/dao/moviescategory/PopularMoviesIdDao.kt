@@ -8,11 +8,13 @@ import androidx.room.Query
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 
 @Dao
-interface PopularMoviesDao {
+interface PopularMoviesIdDao {
 
     @Query("SELECT * FROM PopularMoviesIdTable ORDER BY counter ASC")
     fun getPopularMovies(): DataSource.Factory<Int, PopularMoviesIdTable>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(movies: List<PopularMoviesIdTable>)
+
+
 }

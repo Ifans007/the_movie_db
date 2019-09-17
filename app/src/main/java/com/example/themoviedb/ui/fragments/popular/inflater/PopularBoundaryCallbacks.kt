@@ -1,4 +1,4 @@
-package com.example.themoviedb.fragments.popular.inflater
+package com.example.themoviedb.ui.fragments.popular.inflater
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

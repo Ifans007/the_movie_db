@@ -1,4 +1,4 @@
-package com.example.themoviedb.fragments.popular.inflater
+package com.example.themoviedb.ui.fragments.popular.inflater
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedb.R
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
+import com.example.themoviedb.ui.OnClickListenerMovie
 
-class PopularAdapter : PagedListAdapter<PopularMoviesIdTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
+class PopularAdapter(private val popularMoviesFragmentListener: OnClickListenerMovie) : PagedListAdapter<PopularMoviesIdTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
 
     private val databaseApp = DatabaseApp.getInstance()
 
@@ -20,7 +21,8 @@ class PopularAdapter : PagedListAdapter<PopularMoviesIdTable, RecyclerView.ViewH
 
         return PopularViewHolder(
             view,
-            parent.context
+            parent.context,
+            popularMoviesFragmentListener
         )
     }
 

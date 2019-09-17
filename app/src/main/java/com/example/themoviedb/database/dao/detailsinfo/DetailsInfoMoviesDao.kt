@@ -9,9 +9,12 @@ import com.example.themoviedb.database.entities.detailsinfo.DetailsInfoMoviesTab
 @Dao
 interface DetailsInfoMoviesDao {
 
+    @Query("SELECT * FROM DetailsInfoMoviesTable")
+    fun getAll(): List<DetailsInfoMoviesTable>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(movie: DetailsInfoMoviesTable)
 
     @Query("SELECT * FROM DetailsInfoMoviesTable WHERE movieId = :movieId")
-    fun getById(movieId: Int): DetailsInfoMoviesTable
+    fun getById(movieId: Int): DetailsInfoMoviesTable?
 }

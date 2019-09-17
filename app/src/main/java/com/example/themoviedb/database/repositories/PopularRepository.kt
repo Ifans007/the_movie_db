@@ -3,7 +3,7 @@ package com.example.themoviedb.database.repositories
 import androidx.paging.LivePagedListBuilder
 import com.example.themoviedb.database.cache.moviescategory.PopularMoviesIdListCache
 import com.example.themoviedb.database.databaseresults.MoviesResults
-import com.example.themoviedb.fragments.popular.inflater.PopularBoundaryCallbacks
+import com.example.themoviedb.ui.fragments.popular.inflater.PopularBoundaryCallbacks
 
 class PopularRepository {
 

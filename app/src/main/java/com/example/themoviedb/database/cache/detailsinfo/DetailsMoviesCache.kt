@@ -10,6 +10,7 @@ import com.example.themoviedb.database.entities.detailsinfo.DetailsInfoMoviesTab
 import com.example.themoviedb.retrofitservice.requests.GetRequest
 import com.example.themoviedb.retrofitservice.requests.models.detailsinfo.DetailsInfoMoviesModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -22,77 +23,88 @@ object DetailsMoviesCache {
     private val productionCountryCache   = ProductionCountryCache
     private val spokenLanguageCache      = SpokenLanguageCache
 
-    fun insertMoviesList(
-        listMovies: List<Int>,
-        onError: (error: String) -> Unit,
-        finished: () -> Unit) = runBlocking(Dispatchers.IO) {
 
-        for (movieId in listMovies) {
-            GetRequest.getMovieById(movieId,
-                {movie ->
 
-                    val moviesTable = DetailsInfoMoviesTable()
+    fun insert(
+        movieId: Int,
+        onSuccess: (movie: DetailsInfoMoviesTable) -> Unit,
+        onError: (error: String) -> Unit) = runBlocking {
 
-                    moviesTable.movieId             = movie.id
-                    moviesTable.adult               = movie.adult
-                    moviesTable.backdropPath        = movie.backdropPath
+        val movieRequest = async(Dispatchers.IO) { GetRequest.getDetailsMovieById(movieId)}.await()
+
+        if (movieRequest != null) {
+            val movie = cacheMovie(movieRequest)
+            onSuccess(movie)
+        } else {
+            onError("Network error")
+        }
+    }
+
+    private fun cacheMovie(result: DetailsInfoMoviesModel)
+
+            = runBlocking(Dispatchers.IO) {
+
+                val moviesTable = DetailsInfoMoviesTable()
+
+                launch(Dispatchers.IO) {
+
+                    moviesTable.movieId = result.id
+                    moviesTable.adult = result.adult
+                    moviesTable.backdropPath = result.backdropPath
                     launch {
                         setBelongsToCollection(
                             moviesTable,
-                            movie
-
+                            result
                         )
                     }
-                    moviesTable.budget              = movie.budget
+                    moviesTable.budget = result.budget
                     launch {
                         setGenre(
                             moviesTable,
-                            movie
+                            result
                         )
                     }
-                    moviesTable.homepage            = movie.homepage
-                    moviesTable.imdbId              = movie.imdbId
-                    moviesTable.originalLanguage    = movie.originalLanguage
-                    moviesTable.originalTitle       = movie.originalTitle
-                    moviesTable.overview            = movie.overview
-                    moviesTable.popularity          = movie.popularity
-                    moviesTable.posterPath          = movie.posterPath
+                    moviesTable.homepage = result.homepage
+                    moviesTable.imdbId = result.imdbId
+                    moviesTable.originalLanguage = result.originalLanguage
+                    moviesTable.originalTitle = result.originalTitle
+                    moviesTable.overview = result.overview
+                    moviesTable.popularity = result.popularity
+                    moviesTable.posterPath = result.posterPath
                     launch {
                         setProductionCompanies(
                             moviesTable,
-                            movie
+                            result
                         )
                     }
                     launch {
                         setProductionCountry(
                             moviesTable,
-                            movie
+                            result
                         )
                     }
-                    moviesTable.releaseDate         = movie.releaseDate
-                    moviesTable.revenue             = movie.revenue
-                    moviesTable.runtime             = movie.runtime
+                    moviesTable.releaseDate = result.releaseDate
+                    moviesTable.revenue = result.revenue
+                    moviesTable.runtime = result.runtime
                     launch {
                         setSpokenLanguage(
                             moviesTable,
-                            movie
+                            result
                         )
                     }
-                    moviesTable.status              = movie.status
-                    moviesTable.tagline             = movie.tagline
-                    moviesTable.title               = movie.title
-                    moviesTable.video               = movie.video
-                    moviesTable.voteAverage         = movie.voteAverage
-                    moviesTable.voteCount           = movie.voteCount
+                    moviesTable.status = result.status
+                    moviesTable.tagline = result.tagline
+                    moviesTable.title = result.title
+                    moviesTable.video = result.video
+                    moviesTable.voteAverage = result.voteAverage
+                    moviesTable.voteCount = result.voteCount
 
-                    launch { databaseMovies.detailsInfoMoviesDao().insert(moviesTable) }
-                },
+                }.join()
 
-                {error -> onError(error)}
-            )
+                launch(Dispatchers.IO) { databaseMovies.detailsInfoMoviesDao().insert(moviesTable) }.join()
+
+                return@runBlocking moviesTable
         }
-        finished()
-    }
 
     private fun setBelongsToCollection(
         moviesTable: DetailsInfoMoviesTable,
@@ -116,9 +128,9 @@ object DetailsMoviesCache {
 
         val genres: MutableList<Int> = mutableListOf()
 
-        for (genreId in movie.genresList!!.indices) {
+        for (genreId in movie.genresList!!) {
 
-            genres.add(genreId)
+            genres.add(genreId.id!!)
         }
 
         moviesTable.genresList = GenresListToString.convert(genres)

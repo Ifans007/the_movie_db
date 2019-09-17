@@ -11,10 +11,10 @@ import retrofit2.http.Query
 interface Requests {
 
     @GET("movie/{movie_id}")
-    fun movieById(@Path("movie_id") movieId: Int,
-                  @Query("api_key") apiKey: String,
-                  @Query("language") language: String,
-                  @Query("region") region: String
+     fun detailsMovieById(@Path("movie_id") movieId: Int,
+                         @Query("api_key") apiKey: String,
+                         @Query("language") language: String,
+                         @Query("region") region: String
     ): Call<DetailsInfoMoviesModel>
 
 

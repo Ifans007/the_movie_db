@@ -1,4 +1,4 @@
-package com.example.themoviedb.fragments.popular.inflater
+package com.example.themoviedb.ui.fragments.popular.inflater
 
 import android.content.Context
 import android.view.View
@@ -12,11 +12,16 @@ import com.example.themoviedb.R
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.CommonInfoMoviesTable
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
+import com.example.themoviedb.ui.OnClickListenerMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
-class PopularViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+class PopularViewHolder(
+    itemView: View,
+    private val context: Context,
+    private val popularMoviesFragmentListener: OnClickListenerMovie
+) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     var movieTitle: TextView
     var movieRating: RatingBar
@@ -24,6 +29,7 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
     var movieReleaseDate: TextView
     var moviePoster: ImageView
     var movieOverView: TextView
+    private var thisMovie: CommonInfoMoviesTable? = null
 
     init{
         movieTitle = itemView.findViewById(R.id.single_item_movie_title)
@@ -33,6 +39,7 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
         moviePoster = itemView.findViewById(R.id.single_item_movie_image)
         movieOverView = itemView.findViewById(R.id.single_item_movie_overview)
 
+        itemView.setOnClickListener(this)
     }
 
     fun bindPopularData(
@@ -60,6 +67,8 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
 
         if (movie != null) {
 
+            thisMovie = movie
+
             movieTitle.text = movie.title
             movieRating.rating = movie.voteAverage!!.div(2)
             movieReleaseDate.text = movie.releaseDate!!
@@ -75,5 +84,13 @@ class PopularViewHolder(itemView: View, private val context: Context) : Recycler
 
     private fun buildImageUrl(path: String): String {
         return "http://image.tmdb.org/t/p/w342" + path
+    }
+
+
+        override fun onClick(v: View?) {
+        val position:Int = adapterPosition
+        if (position != RecyclerView.NO_POSITION){
+            popularMoviesFragmentListener.onClickListenerMovie(thisMovie!!.movieId!!)
+        }
     }
 }

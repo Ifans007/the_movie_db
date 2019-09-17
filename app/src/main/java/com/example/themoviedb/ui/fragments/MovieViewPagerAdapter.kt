@@ -1,4 +1,4 @@
-package com.example.themoviedb.fragments
+package com.example.themoviedb.ui.fragments
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

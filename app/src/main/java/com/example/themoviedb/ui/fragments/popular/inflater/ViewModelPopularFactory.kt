@@ -1,4 +1,4 @@
-package com.example.themoviedb.fragments.popular.inflater
+package com.example.themoviedb.ui.fragments.popular.inflater
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

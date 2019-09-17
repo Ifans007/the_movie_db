@@ -16,10 +16,6 @@ object GetRequest {
     fun getGenresList(onSuccess: (movie: GenresRequest) -> Unit,
                       onError: (error: String) -> Unit) {
 
-//        runBlocking {
-//
-//            launch(Dispatchers.Main) {
-
         service.genresList(
             TMDB_API_KEY,
             "ru-RU")
@@ -51,36 +47,27 @@ object GetRequest {
 
             )
 
-//            }.join()
-//        }
-
     }
 
-    fun getMovieById(movieId: Int,
-                     onSuccess: (movie: DetailsInfoMoviesModel) -> Unit,
-                     onError: (error: String) -> Unit) {
+    fun getDetailsMovieById(movieId: Int): DetailsInfoMoviesModel? {
 
-        service.movieById(
-            movieId,
-            TMDB_API_KEY,
-            "ru-RU",
-            "RU")
-            .enqueue(
-                object : Callback<DetailsInfoMoviesModel> {
-                    override fun onFailure(call: Call<DetailsInfoMoviesModel>, t: Throwable) {
-                        onError(t.message ?: "unknown error")
-                    }
+        var response: DetailsInfoMoviesModel? = null
 
-                    override fun onResponse(call: Call<DetailsInfoMoviesModel>, response: Response<DetailsInfoMoviesModel>) {
-                        if (response.isSuccessful) {
-                            val movieRequest = response.body() ?: DetailsInfoMoviesModel()
-                            onSuccess(movieRequest)
-                        } else {
-                            onError(response.errorBody()?.string() ?: "Unknown error")
-                        }
-                    }
+        try {
 
-                })
+            response = service.detailsMovieById(
+                movieId,
+                TMDB_API_KEY,
+                "ru-RU",
+                "RU"
+            ).execute().body()
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return response
 
     }
 
