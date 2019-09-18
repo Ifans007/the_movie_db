@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.themoviedb.R
+import com.example.themoviedb.Resources
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.CommonInfoMoviesTable
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
@@ -76,16 +77,11 @@ class PopularViewHolder(
 
             movieType.text = movie.genres
 
-            Glide.with(context).load(buildImageUrl(movie.posterPath!!)).thumbnail(0.05f)
+            Glide.with(context).load(Resources.buildImagePosterUrl(movie.posterPath!!)).thumbnail(0.05f)
                 .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
 
         }
     }
-
-    private fun buildImageUrl(path: String): String {
-        return "http://image.tmdb.org/t/p/w342" + path
-    }
-
 
         override fun onClick(v: View?) {
         val position:Int = adapterPosition

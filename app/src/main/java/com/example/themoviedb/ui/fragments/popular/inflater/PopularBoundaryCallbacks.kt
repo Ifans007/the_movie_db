@@ -36,12 +36,14 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<PopularMoviesIdTable
 
     private fun requestAndSavePopularData() {
 
+        println("$lastRequestedPage   66666666666666666666666")
+
         GetRequest.getPopularMovies(lastRequestedPage,
             { movieRequest ->
 
-                runBlocking {
+                runBlocking(Dispatchers.IO) {
 
-                    launch(Dispatchers.IO) { commonInfoMoviesCache.insert(movieRequest.results!!) }.join()
+                    launch { commonInfoMoviesCache.insert(movieRequest.results!!) }.join()
 
                     popularMoviesIdListCache.insert(movieRequest.results!!)
                 }

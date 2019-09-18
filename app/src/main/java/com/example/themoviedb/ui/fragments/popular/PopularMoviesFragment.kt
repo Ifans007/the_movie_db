@@ -18,7 +18,7 @@ import com.example.themoviedb.R
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 import com.example.themoviedb.database.repositories.PopularRepository
 import com.example.themoviedb.ui.OnClickListenerMovie
-import com.example.themoviedb.ui.activity.moviedescription.MovieDescriptionActivity
+import com.example.themoviedb.ui.activity.moviedescription.MovieDetailsActivity
 import com.example.themoviedb.ui.fragments.popular.inflater.PopularAdapter
 import com.example.themoviedb.ui.fragments.popular.inflater.PopularViewModel
 import com.example.themoviedb.ui.fragments.popular.inflater.ViewModelPopularFactory
@@ -71,7 +71,7 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
         recyclerView.adapter = movieAdapter
 
         viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesIdTable>> {
-            movieAdapter.submitList(it!!)
+            movieAdapter.submitList(it)
 //            if (it.size != 0) {
 //                swipeRefreshLayout.isRefreshing = false
 //            }
@@ -111,7 +111,7 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
     }
 
     override fun onClickListenerMovie(movieId: Int) {
-        val intent = Intent(context, MovieDescriptionActivity::class.java)
+        val intent = Intent(context, MovieDetailsActivity::class.java)
         intent.putExtra("movieId",movieId)
         context!!.startActivity(intent)
     }

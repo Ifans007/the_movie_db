@@ -5,17 +5,20 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "ProductionCompanyTable")
 class ProductionCompanyTable(@PrimaryKey
-                             var id: Int? = null,
-                             var logoPath: String? = null,
-                             var name: String? = null,
-                             var originCountry: String? = null
+                             var id: Int = 0,
+                             var logoPath: String = "",
+                             var name: String = "",
+                             var originCountry: String = ""
 ) {
+
+
+
     override fun equals(other: Any?): Boolean {
         return id == other
     }
 
     override fun hashCode(): Int {
-        return id!!
+        return id
     }
 
     override fun toString(): String {

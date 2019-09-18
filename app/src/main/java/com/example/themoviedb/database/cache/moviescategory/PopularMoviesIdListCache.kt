@@ -4,7 +4,6 @@ import androidx.paging.DataSource
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 import com.example.themoviedb.retrofitservice.requests.models.CommonInfoMoviesModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -29,7 +28,7 @@ object PopularMoviesIdListCache {
             popularMoviesIdIdList.add(popularMoviesTable)
         }
 
-         launch(Dispatchers.IO) {
+         launch {
              databaseMovies.popularMoviesDao().insert(popularMoviesIdIdList)
          }.join()
 

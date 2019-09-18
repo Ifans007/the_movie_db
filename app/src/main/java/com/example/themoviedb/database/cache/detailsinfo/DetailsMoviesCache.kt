@@ -23,9 +23,10 @@ object DetailsMoviesCache {
     private val productionCountryCache   = ProductionCountryCache
     private val spokenLanguageCache      = SpokenLanguageCache
 
+    private lateinit var movie: DetailsInfoMoviesTable
 
 
-    fun insert(
+    @Synchronized fun insert(
         movieId: Int,
         onSuccess: (movie: DetailsInfoMoviesTable) -> Unit,
         onError: (error: String) -> Unit) = runBlocking {
@@ -33,20 +34,31 @@ object DetailsMoviesCache {
         val movieRequest = async(Dispatchers.IO) { GetRequest.getDetailsMovieById(movieId)}.await()
 
         if (movieRequest != null) {
-            val movie = cacheMovie(movieRequest)
-            onSuccess(movie)
+
+            launch {
+
+                launch(Dispatchers.IO) { movie = createTableMovie(movieRequest)}.join()
+                launch { onSuccess(movie) }
+                launch(Dispatchers.IO) { cacheMovie(movie) }
+
+            }
+
+
+
         } else {
             onError("Network error")
         }
+
+
     }
 
-    private fun cacheMovie(result: DetailsInfoMoviesModel)
+    private suspend fun createTableMovie(result: DetailsInfoMoviesModel)
 
-            = runBlocking(Dispatchers.IO) {
+            = runBlocking {
 
                 val moviesTable = DetailsInfoMoviesTable()
 
-                launch(Dispatchers.IO) {
+                launch {
 
                     moviesTable.movieId = result.id
                     moviesTable.adult = result.adult
@@ -101,10 +113,12 @@ object DetailsMoviesCache {
 
                 }.join()
 
-                launch(Dispatchers.IO) { databaseMovies.detailsInfoMoviesDao().insert(moviesTable) }.join()
-
                 return@runBlocking moviesTable
         }
+
+    private fun cacheMovie(movie: DetailsInfoMoviesTable) {
+        databaseMovies.detailsInfoMoviesDao().insert(movie)
+    }
 
     private fun setBelongsToCollection(
         moviesTable: DetailsInfoMoviesTable,

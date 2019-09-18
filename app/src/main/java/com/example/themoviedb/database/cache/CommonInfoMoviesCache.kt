@@ -4,7 +4,6 @@ import com.example.themoviedb.convert.GenresListToString
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.CommonInfoMoviesTable
 import com.example.themoviedb.retrofitservice.requests.models.CommonInfoMoviesModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -25,7 +24,7 @@ object CommonInfoMoviesCache {
                 commonInfoMoviesTable.movieId          = movie.movieId
                 commonInfoMoviesTable.adult            = movie.adult
                 commonInfoMoviesTable.backdropPath     = movie.backdropPath
-                val genreCoroutine = launch(Dispatchers.IO) { setGenre(commonInfoMoviesTable, movie) }
+                val genreCoroutine = launch { setGenre(commonInfoMoviesTable, movie) }
                 commonInfoMoviesTable.originalLanguage = movie.originalLanguage
                 commonInfoMoviesTable.originalTitle    = movie.originalTitle
                 commonInfoMoviesTable.overview         = movie.overview
@@ -42,7 +41,7 @@ object CommonInfoMoviesCache {
                 commonInfoMoviesTableList.add(commonInfoMoviesTable)
             }
 
-            launch(Dispatchers.IO) { databaseMovies.commonInfoMoviesDao().insert(commonInfoMoviesTableList) }.join()
+            launch { databaseMovies.commonInfoMoviesDao().insert(commonInfoMoviesTableList) }.join()
         }
 
     }
