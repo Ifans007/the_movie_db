@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 
 data class PopularMoviesIdTable(@PrimaryKey(autoGenerate = true)
                                 var counter: Int = 0,
-                                var movieId: Int? = null) {
-}
+                                var movieId: Int = -1
+)

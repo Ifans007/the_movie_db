@@ -3,56 +3,57 @@ package com.example.themoviedb.retrofitservice.requests.models.detailsinfo
 import com.example.themoviedb.retrofitservice.requests.models.detailsinfo.additions.*
 import com.google.gson.annotations.SerializedName
 
-class DetailsInfoMoviesModel {
+class DetailsInfoMoviesModel(
 
     @SerializedName("adult")
-    val adult: Boolean? = null
+    val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String? = null
+    val backdropPath: String?,
     @SerializedName("belongs_to_collection")
-    val belongsToCollection: BelongsToCollectionModel? = null
+    val belongsToCollection: BelongsToCollectionModel?,
     @SerializedName("budget")
-    val budget: Int? = null
+    val budget: Int,
     @SerializedName("genres")
-    val genresList: List<GenreModel>? = null
+    val genresList: List<GenreModel>,
     @SerializedName("homepage")
-    val homepage: String? = null
+    val homepage: String?,
     @SerializedName("id")
-    val id: Int? = null
+    val id: Int,
     @SerializedName("imdb_id")
-    val imdbId: String? = null
+    val imdbId: String?,
     @SerializedName("original_language")
-    val originalLanguage: String? = null
+    val originalLanguage: String,
     @SerializedName("original_title")
-    val originalTitle: String? = null
+    val originalTitle: String,
     @SerializedName("overview")
-    val overview: String? = null
+    val overview: String?,
     @SerializedName("popularity")
-    val popularity: Double? = null
+    val popularity: Float,
     @SerializedName("poster_path")
-    val posterPath: String? = null
+    val posterPath: String?,
     @SerializedName("production_companies")
-    val productionCompaniesList: List<ProductionCompanyModel>? = null
+    val productionCompaniesList: List<ProductionCompanyModel>,
     @SerializedName("production_countries")
-    val productionCountriesList: List<ProductionCountryModel>? = null
+    val productionCountriesList: List<ProductionCountryModel>,
     @SerializedName("release_date")
-    val releaseDate: String? = null
+    val releaseDate: String,
     @SerializedName("revenue")
-    val revenue: Long? = null
+    val revenue: Long,
     @SerializedName("runtime")
-    val runtime: Int? = null
+    val runtime: Int?,
     @SerializedName("spoken_languages")
-    val spokenLanguagesList: List<SpokenLanguageModel>? = null
+    val spokenLanguagesList: List<SpokenLanguageModel>,
     @SerializedName("status")
-    val status: String? = null
+    val status: String,
     @SerializedName("tagline")
-    val tagline: String? = null
+    val tagline: String?,
     @SerializedName("title")
-    val title: String? = null
+    val title: String,
     @SerializedName("video")
-    val video: Boolean? = null
+    val video: Boolean,
     @SerializedName("vote_average")
-    val voteAverage: Double? = null
+    val voteAverage: Float,
     @SerializedName("vote_count")
-    val voteCount: Int? = null
-}
+    val voteCount: Int
+)
+

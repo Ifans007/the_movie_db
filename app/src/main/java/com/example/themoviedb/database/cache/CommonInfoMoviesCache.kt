@@ -23,13 +23,13 @@ object CommonInfoMoviesCache {
 
                 commonInfoMoviesTable.movieId          = movie.movieId
                 commonInfoMoviesTable.adult            = movie.adult
-                commonInfoMoviesTable.backdropPath     = movie.backdropPath
+                commonInfoMoviesTable.backdropPath     = movie.backdropPath ?: ""
                 val genreCoroutine = launch { setGenre(commonInfoMoviesTable, movie) }
                 commonInfoMoviesTable.originalLanguage = movie.originalLanguage
                 commonInfoMoviesTable.originalTitle    = movie.originalTitle
                 commonInfoMoviesTable.overview         = movie.overview
                 commonInfoMoviesTable.popularity       = movie.popularity
-                commonInfoMoviesTable.posterPath       = movie.posterPath
+                commonInfoMoviesTable.posterPath       = movie.posterPath ?: ""
                 commonInfoMoviesTable.releaseDate      = movie.releaseDate
                 commonInfoMoviesTable.title            = movie.title
                 commonInfoMoviesTable.video            = movie.video

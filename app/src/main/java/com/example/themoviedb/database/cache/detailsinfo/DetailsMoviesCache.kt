@@ -52,7 +52,7 @@ object DetailsMoviesCache {
 
     }
 
-    private suspend fun createTableMovie(result: DetailsInfoMoviesModel)
+    private suspend fun createTableMovie(movie: DetailsInfoMoviesModel)
 
             = runBlocking {
 
@@ -60,56 +60,59 @@ object DetailsMoviesCache {
 
                 launch {
 
-                    moviesTable.movieId = result.id
-                    moviesTable.adult = result.adult
-                    moviesTable.backdropPath = result.backdropPath
+                    moviesTable.movieId = movie.id
+                    moviesTable.adult = movie.adult
+                    moviesTable.backdropPath = movie.backdropPath ?: ""
                     launch {
                         setBelongsToCollection(
                             moviesTable,
-                            result
+                            movie
                         )
                     }
-                    moviesTable.budget = result.budget
+                    moviesTable.budget = movie.budget
                     launch {
                         setGenre(
                             moviesTable,
-                            result
+                            movie
                         )
                     }
-                    moviesTable.homepage = result.homepage
-                    moviesTable.imdbId = result.imdbId
-                    moviesTable.originalLanguage = result.originalLanguage
-                    moviesTable.originalTitle = result.originalTitle
-                    moviesTable.overview = result.overview
-                    moviesTable.popularity = result.popularity
-                    moviesTable.posterPath = result.posterPath
+                    moviesTable.homepage = movie.homepage ?: "-"
+                    moviesTable.imdbId = movie.imdbId ?: "-"
+                    moviesTable.originalLanguage = movie.originalLanguage
+                    moviesTable.originalTitle = movie.originalTitle
+                    moviesTable.overview = movie.overview ?: "-"
+                    moviesTable.popularity = movie.popularity
+                    moviesTable.posterPath = movie.posterPath ?: "-"
                     launch {
                         setProductionCompanies(
                             moviesTable,
-                            result
+                            movie
                         )
                     }
                     launch {
                         setProductionCountry(
                             moviesTable,
-                            result
+                            movie
                         )
                     }
-                    moviesTable.releaseDate = result.releaseDate
-                    moviesTable.revenue = result.revenue
-                    moviesTable.runtime = result.runtime
+                    moviesTable.releaseDate = movie.releaseDate
+                    moviesTable.revenue = movie.revenue
+                    moviesTable.runtime = movie.runtime ?: -1
                     launch {
                         setSpokenLanguage(
                             moviesTable,
-                            result
+                            movie
                         )
                     }
-                    moviesTable.status = result.status
-                    moviesTable.tagline = result.tagline
-                    moviesTable.title = result.title
-                    moviesTable.video = result.video
-                    moviesTable.voteAverage = result.voteAverage
-                    moviesTable.voteCount = result.voteCount
+                    moviesTable.status = movie.status
+                    when(movie.tagline) {
+                        "" -> moviesTable.tagline = "---"
+                        else -> moviesTable.tagline = movie.tagline ?: "---"
+                    }
+                    moviesTable.title = movie.title
+                    moviesTable.video = movie.video
+                    moviesTable.voteAverage = movie.voteAverage
+                    moviesTable.voteCount = movie.voteCount
 
                 }.join()
 
@@ -142,9 +145,9 @@ object DetailsMoviesCache {
 
         val genres: MutableList<Int> = mutableListOf()
 
-        for (genreId in movie.genresList!!) {
+        for (genreId in movie.genresList) {
 
-            genres.add(genreId.id!!)
+            genres.add(genreId.id)
         }
 
         moviesTable.genresList = GenresListToString.convert(genres)
@@ -154,7 +157,7 @@ object DetailsMoviesCache {
         moviesTable: DetailsInfoMoviesTable,
         movie: DetailsInfoMoviesModel
     ) {
-        if (movie.productionCompaniesList != null) {
+        if (movie.productionCompaniesList.isNotEmpty()) {
             productionCompanyCache
                 .insert(
                     databaseMovies.productionCompanyDao(),
@@ -173,7 +176,7 @@ object DetailsMoviesCache {
         moviesTable: DetailsInfoMoviesTable,
         movie: DetailsInfoMoviesModel
     ) {
-        if (movie.productionCountriesList != null) {
+        if (movie.productionCountriesList.isNotEmpty()) {
             productionCountryCache
                 .insert(
                     databaseMovies.productionCountryDao(),
@@ -192,7 +195,7 @@ object DetailsMoviesCache {
         moviesTable: DetailsInfoMoviesTable,
         movie: DetailsInfoMoviesModel
     ) {
-        if (movie.spokenLanguagesList != null) {
+        if (movie.spokenLanguagesList.isNotEmpty()) {
             spokenLanguageCache
                 .insert(
                     databaseMovies.spokenLanguageDao(),

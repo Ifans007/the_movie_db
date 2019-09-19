@@ -1,17 +1,24 @@
 package com.example.test
 
+import com.example.themoviedb.convert.PutSpacesInMoney
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun main() {
 
-    TestOne()
+//    TestForSuspendFun()
 
 //    testOne()
 //    testTwo()
 //    testThree()
 //    testFour()
+
+    var string: String = "1234567890"
+
+    string = PutSpacesInMoney.putSpaceInMoney(string)
+
+    println(string)
 
 
 }

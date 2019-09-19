@@ -4,16 +4,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "GenreTable")
-class GenreTable(@PrimaryKey
-                 var id: Int? = null,
-                 var name: String? = null
-) {
+class GenreTable {
+
+    @PrimaryKey
+    var id: Int = -1
+    lateinit var name: String
+
     override fun equals(other: Any?): Boolean {
         return id == other
     }
 
     override fun hashCode(): Int {
-        return id!!
+        return id
     }
 
     override fun toString(): String {

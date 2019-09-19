@@ -22,11 +22,11 @@ object GenresListToString {
                     if (genreId != genreIds.last()) {
 
                         val genre = async(Dispatchers.IO) { databaseApp.genreDao().getById(genreId).name }
-                        genres += "${genre.await()!!.toUpperCase()}, "
+                        genres += "${genre.await().toUpperCase()}, "
 
                     } else {
                         val genre = async(Dispatchers.IO) { databaseApp.genreDao().getById(genreId).name }
-                        genres += genre.await()!!.toUpperCase()
+                        genres += genre.await().toUpperCase()
                     }
                 }
             }

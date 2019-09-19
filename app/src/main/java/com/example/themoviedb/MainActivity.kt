@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.example.themoviedb.ui.fragments.MovieViewPagerAdapter
 import com.example.themoviedb.ui.fragments.popular.PopularMoviesFragment
+import com.example.themoviedb.ui.fragments.toprated.TopRatedFragment
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
@@ -13,9 +14,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
-
-    private lateinit var movieViewPagerAdapter: MovieViewPagerAdapter
-    private lateinit var popularMoviesFragment: PopularMoviesFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +40,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager() {
-        movieViewPagerAdapter = MovieViewPagerAdapter(supportFragmentManager)
+        val movieViewPagerAdapter = MovieViewPagerAdapter(supportFragmentManager)
 
-        popularMoviesFragment = PopularMoviesFragment()
-
-        movieViewPagerAdapter.addFragment(popularMoviesFragment, "Popular")
+        movieViewPagerAdapter.addFragment(PopularMoviesFragment(), "Популярные")
+        movieViewPagerAdapter.addFragment(TopRatedFragment(), "Лучшие")
 
         viewPager.adapter = movieViewPagerAdapter
     }

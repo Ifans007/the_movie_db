@@ -60,7 +60,7 @@ class PopularViewHolder(
         databaseApp: DatabaseApp
     ): CommonInfoMoviesTable? {
 
-        return databaseApp.commonInfoMoviesDao().getById(popularMoviesIdTable.movieId!!)
+        return databaseApp.commonInfoMoviesDao().getById(popularMoviesIdTable.movieId)
     }
 
 
@@ -71,13 +71,13 @@ class PopularViewHolder(
             thisMovie = movie
 
             movieTitle.text = movie.title
-            movieRating.rating = movie.voteAverage!!.div(2)
-            movieReleaseDate.text = movie.releaseDate!!
+            movieRating.rating = movie.voteAverage.div(2)
+            movieReleaseDate.text = movie.releaseDate
             movieOverView.text = movie.overview
 
             movieType.text = movie.genres
 
-            Glide.with(context).load(Resources.buildImagePosterUrl(movie.posterPath!!)).thumbnail(0.05f)
+            Glide.with(context).load(Resources.buildImagePosterUrl(movie.posterPath)).thumbnail(0.05f)
                 .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
 
         }
@@ -86,7 +86,7 @@ class PopularViewHolder(
         override fun onClick(v: View?) {
         val position:Int = adapterPosition
         if (position != RecyclerView.NO_POSITION){
-            popularMoviesFragmentListener.onClickListenerMovie(thisMovie!!.movieId!!)
+            popularMoviesFragmentListener.onClickListenerMovie(thisMovie!!.movieId)
         }
     }
 }

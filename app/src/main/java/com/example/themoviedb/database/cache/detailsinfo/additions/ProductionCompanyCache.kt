@@ -19,7 +19,7 @@ object ProductionCompanyCache {
             val productionCompanyTable = ProductionCompanyTable()
 
             productionCompanyTable.id            = productionCompany.id
-            productionCompanyTable.logoPath      = productionCompany.logoPath
+            productionCompanyTable.logoPath      = productionCompany.logoPath ?: ""
             productionCompanyTable.name          = productionCompany.name
             productionCompanyTable.originCountry = productionCompany.originCountry
 

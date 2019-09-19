@@ -2,34 +2,34 @@ package com.example.themoviedb.retrofitservice.requests.models
 
 import com.google.gson.annotations.SerializedName
 
-class CommonInfoMoviesModel {
+class CommonInfoMoviesModel(
 
     @SerializedName("id")
-    var movieId: Int? = null
+    var movieId: Int,
     @SerializedName("adult")
-    var adult: Boolean? = null
+    var adult: Boolean,
     @SerializedName("backdrop_path")
-    var backdropPath: String? = null
+    var backdropPath: String?,
     @SerializedName("genre_ids")
-    var genreIds: List<Int>? = null
+    var genreIds: List<Int>,
     @SerializedName("original_language")
-    var originalLanguage: String? = null
+    var originalLanguage: String,
     @SerializedName("original_title")
-    var originalTitle: String? = null
+    var originalTitle: String,
     @SerializedName("overview")
-    var overview: String? = null
+    var overview: String,
     @SerializedName("popularity")
-    var popularity: Float? = null
+    var popularity: Float,
     @SerializedName("poster_path")
-    var posterPath: String? = null
+    var posterPath: String?,
     @SerializedName("release_date")
-    var releaseDate: String? = null
+    var releaseDate: String,
     @SerializedName("title")
-    var title: String? = null
+    var title: String,
     @SerializedName("video")
-    var video: Boolean? = null
+    var video: Boolean,
     @SerializedName("vote_average")
-    var voteAverage: Float? = null
+    var voteAverage: Float,
     @SerializedName("vote_count")
-    var voteCount: Int? = null
-}
+    var voteCount: Int
+)

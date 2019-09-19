@@ -6,10 +6,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/color_dark_gray</item>
+        <item name="android:textColor">@color/color_dark_gray</item>
     </style>
 
-    <style name="textColorDetailsMoviesActivity">
-        <item name="android:textColor">@color/color_gray</item>
+    <style name="CardViewBlackText" parent="CardView">
+        <item name="android:background">@color/color_gray</item>
+        <item name="android:textColor">@color/color_black_gray</item>
     </style>
+    
+    <style name="DetailTextNearPoster" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">17sp</item>
+
+    </style>
+
 
 </resources>

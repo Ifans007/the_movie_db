@@ -4,12 +4,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "ProductionCompanyTable")
-class ProductionCompanyTable(@PrimaryKey
-                             var id: Int = 0,
-                             var logoPath: String = "",
-                             var name: String = "",
-                             var originCountry: String = ""
-) {
+class ProductionCompanyTable {
+
+    @PrimaryKey
+    var id: Int = -1
+    lateinit var logoPath: String
+    lateinit var name: String
+    lateinit var originCountry: String
 
 
 
