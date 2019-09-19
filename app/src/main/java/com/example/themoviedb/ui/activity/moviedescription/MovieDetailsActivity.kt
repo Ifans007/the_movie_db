@@ -22,10 +22,10 @@ import com.example.themoviedb.ui.activity.moviedescription.fragments.DetailsMovi
 import com.example.themoviedb.ui.activity.moviedescription.fragments.DetailsMovieInfoFragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MovieDetailsActivity : AppCompatActivity() {
 
@@ -39,9 +39,6 @@ class MovieDetailsActivity : AppCompatActivity() {
     private lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
-//    private lateinit var title: TextView
-//    private lateinit var releaseDate: TextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +46,9 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         initView()
 
-//        setSupportActionBar(toolbar)
-
         val movieId = intent.getIntExtra("movieId", 0)
-        loadMovieInDatabase(movieId)
+
+        CoroutineScope(Dispatchers.Main).launch { loadMovie(movieId) }
 
         settingCollapsingToolbarLayout()
         setUpTransparentStatusBar(window)
@@ -60,8 +56,6 @@ class MovieDetailsActivity : AppCompatActivity() {
         setupViewPager()
 
         setupTabLayout()
-
-
 
     }
 
@@ -72,29 +66,16 @@ class MovieDetailsActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.activity_movie_details_tab_layout)
         viewPager = findViewById(R.id.activity_movie_details_view_pager)
 
-
-
-//        title = findViewById(R.id.activity_detail_title)
-//        releaseDate = findViewById(R.id.activity_detail_release_date)
-
     }
 
-    private fun loadMovieInDatabase(movieId: Int) {
+    private suspend fun loadMovie(movieId: Int) {
 
+        movie = withContext(Dispatchers.IO) { getMovie(movieId) }
 
-        runBlocking {
-
-            launch {
-
-                movie = async(Dispatchers.IO) { getMovie(movieId) }.await()
-
-                if (movie == null) {
-                    insertMovieInDatabase(movieId)
-                }
-
-                fillView(movie)
-            }
-
+        if (movie == null) {
+            CoroutineScope(Dispatchers.Main).launch { insertMovieInDatabase(movieId) }
+        } else {
+            fillView(movie)
         }
 
     }
@@ -104,7 +85,8 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
 
-    private fun insertMovieInDatabase(movieId: Int) {
+    private suspend fun insertMovieInDatabase(movieId: Int) {
+
         detailsMoviesCache.insert(
             movieId,
 
@@ -121,8 +103,6 @@ class MovieDetailsActivity : AppCompatActivity() {
         if (movie == null) return
 
         toolbar.title = movie.title
-//        title.text = movie.title
-//        releaseDate.text = movie.releaseDate
 
         Glide.with(applicationContext).load(Resources.buildBackdropImageUrl(movie.backdropPath))
             .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
@@ -141,7 +121,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         detailsMovieViewPagerAdapter.addFragment(DetailsMovieInfoFragment(movieLiveData), "Инфо")
 
-        detailsMovieViewPagerAdapter.addFragment(DetailsMovieCastFragment(movieLiveData), "Cast")
+        detailsMovieViewPagerAdapter.addFragment(DetailsMovieCastFragment(movieLiveData), "Медиа")
 
         viewPager.adapter = detailsMovieViewPagerAdapter
     }

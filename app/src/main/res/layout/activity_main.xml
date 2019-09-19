@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="horizontal"
     tools:context=".MainActivity"
-    android:background="@color/colorPrimary">
+    android:background="@color/color_blue_black">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/activity_main_app_bar_layout"

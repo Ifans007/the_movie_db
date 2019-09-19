@@ -5,24 +5,27 @@ import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.cache.detailsinfo.additions.GenreCache
 import com.example.themoviedb.retrofitservice.requests.GetRequest
 import com.example.themoviedb.retrofitservice.requests.models.GenresRequest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
-class InitDatabase(private val mainActivity: MainActivity) {
+object InitDatabase {
 
-    init {
+    private lateinit var mainActivity: MainActivity
 
-        runBlocking {
+    suspend fun initDatabase(mainActivity: MainActivity) {
+        this.mainActivity = mainActivity
+        init()
+    }
+
+    private suspend fun init() {
+
+        coroutineScope {
 
             val database = initDataBase()
 
-            val isEmpty = async(Dispatchers.IO) { database.genreDao().getAll().isEmpty() }.await()
-
-            if (isEmpty) {
-
-                requestGenresList({request -> cacheGenresList(database, request) })
-            }
+            requestGenresList({request -> cacheGenresList(database, request) })
         }
     }
 
@@ -37,7 +40,7 @@ class InitDatabase(private val mainActivity: MainActivity) {
                 finished(it)
             },
             {
-                Toast.makeText(mainActivity, "Failed to load genre list: $it.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mainActivity, "Failed to load genre list: $it", Toast.LENGTH_SHORT).show()
                 finished(null)
             })
     }
@@ -47,7 +50,12 @@ class InitDatabase(private val mainActivity: MainActivity) {
         if (requestGenresList?.genresList != null) {
 
             GenreCache.insert(dataBase.genreDao(), requestGenresList.genresList)
-
         }
     }
+
+    fun refresh() {
+        CoroutineScope(Dispatchers.Main).launch { init() }
+    }
+
+
 }

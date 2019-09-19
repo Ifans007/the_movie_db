@@ -38,15 +38,8 @@ object GetRequest {
                             onError(response.errorBody()?.string() ?: "Unknown error")
                         }
                     }
-
-
-
                 }
-
-
-
             )
-
     }
 
     fun getDetailsMovieById(movieId: Int): DetailsInfoMoviesModel? {

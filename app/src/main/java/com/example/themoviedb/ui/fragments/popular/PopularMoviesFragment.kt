@@ -14,6 +14,7 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.themoviedb.InitDatabase
 import com.example.themoviedb.R
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 import com.example.themoviedb.database.repositories.PopularRepository
@@ -54,7 +55,7 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
     private fun initView() {
         recyclerView = mainView.findViewById(R.id.fragment_popular_movies_recycler_view)
         swipeRefreshLayout = mainView.findViewById(R.id.fragment_popular_movies_swipe_refresh)
-//        swipeRefreshLayout.isRefreshing = true
+        swipeRefreshLayout.isRefreshing = true
     }
 
     private fun initRecyclerView() {
@@ -72,13 +73,15 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
 
         viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesIdTable>> {
             movieAdapter.submitList(it)
-//            if (it.size != 0) {
-//                swipeRefreshLayout.isRefreshing = false
-//            }
+
+            if (it.isNotEmpty()) {
+                swipeRefreshLayout.isRefreshing = false
+            }
         })
 
         viewModel.networkErrors.observe(this, Observer<String> {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            swipeRefreshLayout.isRefreshing = false
         })
     }
 
@@ -89,25 +92,17 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
     }
 
     private fun setSwipeRefreshLayoutListener() {
-        swipeRefreshLayout.setOnRefreshListener {
-
-            refresh()
-
-
-            Toast.makeText(context, "It still doesn't work.", Toast.LENGTH_SHORT).show()
-
-
-        }
+        swipeRefreshLayout.setOnRefreshListener { refresh() }
     }
 
     private fun refresh() {
+        InitDatabase.refresh()
+        getPopularData()
     }
 
     private fun getPopularData() {
         viewModel.getPopular("RU")
-
         movieAdapter.submitList(null)
-//        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onClickListenerMovie(movieId: Int) {

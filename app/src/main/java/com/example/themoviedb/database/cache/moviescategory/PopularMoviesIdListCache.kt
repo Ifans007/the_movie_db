@@ -3,36 +3,34 @@ package com.example.themoviedb.database.cache.moviescategory
 import androidx.paging.DataSource
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
-import com.example.themoviedb.retrofitservice.requests.models.CommonInfoMoviesModel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 
 object PopularMoviesIdListCache {
 
     private val databaseMovies = DatabaseApp.getInstance()
 
+    private var counter = 0
+
     fun getAllPopularMoviesId(): DataSource.Factory<Int, PopularMoviesIdTable> {
         return databaseMovies.popularMoviesDao().getPopularMovies()
     }
 
-     @Synchronized fun insert(results: List<CommonInfoMoviesModel>) = runBlocking {
+     @Synchronized suspend fun insert(listMoviesId: List<Int>) {
 
-        val popularMoviesIdIdList: MutableList<PopularMoviesIdTable> = mutableListOf()
+         val popularMoviesIdIdList: MutableList<PopularMoviesIdTable> = mutableListOf()
 
-        for (popularMovies in results) {
+         for (movieId in listMoviesId) {
 
-            val popularMoviesTable = PopularMoviesIdTable()
+             val popularMoviesTable = PopularMoviesIdTable()
 
-            popularMoviesTable.movieId = popularMovies.movieId
+             popularMoviesTable.counter = counter
+             popularMoviesTable.movieId = movieId
 
-            popularMoviesIdIdList.add(popularMoviesTable)
-        }
+             popularMoviesIdIdList.add(popularMoviesTable)
 
-         launch {
-             databaseMovies.popularMoviesDao().insert(popularMoviesIdIdList)
-         }.join()
+             ++counter
+         }
 
+         coroutineScope { databaseMovies.popularMoviesDao().insert(popularMoviesIdIdList) }
     }
-
-
 }

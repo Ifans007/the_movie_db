@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "PopularMoviesIdTable")
 
-data class PopularMoviesIdTable(@PrimaryKey(autoGenerate = true)
+data class PopularMoviesIdTable(@PrimaryKey
                                 var counter: Int = 0,
                                 var movieId: Int = -1
 )

@@ -4,24 +4,27 @@ import com.example.themoviedb.convert.GenresListToString
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.CommonInfoMoviesTable
 import com.example.themoviedb.retrofitservice.requests.models.CommonInfoMoviesModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 object CommonInfoMoviesCache {
 
     private val databaseMovies = DatabaseApp.getInstance()
 
-    @Synchronized fun insert(results: List<CommonInfoMoviesModel>) {
+    @Synchronized suspend fun insert(results: List<CommonInfoMoviesModel>): List<Int> {
 
-        val commonInfoMoviesTableList: MutableList<CommonInfoMoviesTable> = mutableListOf()
+        val commonInfoMoviesTableList = mutableListOf<CommonInfoMoviesTable>()
+        val listMoviesId = mutableListOf<Int>()
 
-        runBlocking {
+
+        coroutineScope {
 
             for (movie in results) {
 
                 val commonInfoMoviesTable = CommonInfoMoviesTable()
 
                 commonInfoMoviesTable.movieId          = movie.movieId
+                listMoviesId.add(movie.movieId)
                 commonInfoMoviesTable.adult            = movie.adult
                 commonInfoMoviesTable.backdropPath     = movie.backdropPath ?: ""
                 val genreCoroutine = launch { setGenre(commonInfoMoviesTable, movie) }
@@ -43,7 +46,7 @@ object CommonInfoMoviesCache {
 
             launch { databaseMovies.commonInfoMoviesDao().insert(commonInfoMoviesTableList) }.join()
         }
-
+        return listMoviesId
     }
 
     private fun setGenre(moviesTable: CommonInfoMoviesTable, movie: CommonInfoMoviesModel) {

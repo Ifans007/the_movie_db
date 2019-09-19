@@ -2,7 +2,7 @@ package com.example.themoviedb
 
 object Resources {
 
-    fun buildImagePosterUrl(path: String): String {
+    fun buildPosterImageUrl(path: String): String {
         return "http://image.tmdb.org/t/p/w342" + path
     }
 

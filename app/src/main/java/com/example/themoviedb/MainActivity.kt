@@ -8,6 +8,9 @@ import com.example.themoviedb.ui.fragments.MovieViewPagerAdapter
 import com.example.themoviedb.ui.fragments.popular.PopularMoviesFragment
 import com.example.themoviedb.ui.fragments.toprated.TopRatedFragment
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +22,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        InitDatabase(this)
+        CoroutineScope(Dispatchers.Main)
+            .launch { InitDatabase.initDatabase(this@MainActivity) }
 
         initView()
         setupToolBar()

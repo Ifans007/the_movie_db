@@ -77,7 +77,7 @@ class PopularViewHolder(
 
             movieType.text = movie.genres
 
-            Glide.with(context).load(Resources.buildImagePosterUrl(movie.posterPath)).thumbnail(0.05f)
+            Glide.with(context).load(Resources.buildPosterImageUrl(movie.posterPath)).thumbnail(0.05f)
                 .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)
 
         }

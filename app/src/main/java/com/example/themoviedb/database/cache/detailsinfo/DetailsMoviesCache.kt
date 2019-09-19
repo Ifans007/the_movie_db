@@ -10,9 +10,9 @@ import com.example.themoviedb.database.entities.detailsinfo.DetailsInfoMoviesTab
 import com.example.themoviedb.retrofitservice.requests.GetRequest
 import com.example.themoviedb.retrofitservice.requests.models.detailsinfo.DetailsInfoMoviesModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 object DetailsMoviesCache {
 
@@ -25,31 +25,23 @@ object DetailsMoviesCache {
 
     private lateinit var movie: DetailsInfoMoviesTable
 
-
-    @Synchronized fun insert(
+    @Synchronized suspend fun insert(
         movieId: Int,
         onSuccess: (movie: DetailsInfoMoviesTable) -> Unit,
-        onError: (error: String) -> Unit) = runBlocking {
+        onError: (error: String) -> Unit) {
 
-        val movieRequest = async(Dispatchers.IO) { GetRequest.getDetailsMovieById(movieId)}.await()
+        val movieRequest =
+            withContext(Dispatchers.IO) { GetRequest.getDetailsMovieById(movieId) }
 
         if (movieRequest != null) {
 
-            launch {
-
-                launch(Dispatchers.IO) { movie = createTableMovie(movieRequest)}.join()
-                launch { onSuccess(movie) }
-                launch(Dispatchers.IO) { cacheMovie(movie) }
-
-            }
-
-
+            movie = withContext(Dispatchers.IO) { createTableMovie(movieRequest)}
+            onSuccess(movie)
+            withContext(Dispatchers.IO) {cacheMovie(movie) }
 
         } else {
             onError("Network error")
         }
-
-
     }
 
     private suspend fun createTableMovie(movie: DetailsInfoMoviesModel)

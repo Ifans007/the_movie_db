@@ -25,14 +25,9 @@ class DetailsMovieCastFragment(movieLiveData: MutableLiveData<DetailsInfoMoviesT
 
         mainView = inflater.inflate(R.layout.fragment_movie_details_info, container, false)
 
-        initView()
-
         return mainView
     }
 
-    private fun initView() {
-        swipeRefreshLayout = mainView.findViewById(R.id.fragment_movie_details_swipe_refresh)
-    }
 
 
 

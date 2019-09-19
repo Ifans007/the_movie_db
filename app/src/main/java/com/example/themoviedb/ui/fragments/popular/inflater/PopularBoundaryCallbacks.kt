@@ -7,9 +7,10 @@ import com.example.themoviedb.database.cache.CommonInfoMoviesCache
 import com.example.themoviedb.database.cache.moviescategory.PopularMoviesIdListCache
 import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
 import com.example.themoviedb.retrofitservice.requests.GetRequest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class PopularBoundaryCallbacks : PagedList.BoundaryCallback<PopularMoviesIdTable>() {
 
@@ -25,27 +26,27 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<PopularMoviesIdTable
     private val commonInfoMoviesCache = CommonInfoMoviesCache
 
     override fun onZeroItemsLoaded() {
-        lastRequestedPage = 1
         requestAndSavePopularData()
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: PopularMoviesIdTable) {
-        lastRequestedPage++
         requestAndSavePopularData()
     }
 
     private fun requestAndSavePopularData() {
 
-        println("$lastRequestedPage   66666666666666666666666")
+        lastRequestedPage++
 
         GetRequest.getPopularMovies(lastRequestedPage,
             { movieRequest ->
 
-                runBlocking(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
 
-                    launch { commonInfoMoviesCache.insert(movieRequest.results!!) }.join()
+                    val listMoviesId = withContext(Dispatchers.IO) {
+                            commonInfoMoviesCache.insert(movieRequest.results!!)
+                    }
 
-                    popularMoviesIdListCache.insert(movieRequest.results!!)
+                    popularMoviesIdListCache.insert(listMoviesId)
                 }
 
             }, { error ->

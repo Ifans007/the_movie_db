@@ -16,8 +16,8 @@ object BelongsToCollectionCache {
 
         belongsToCollectionTable.id             = belongsToCollection.id
         belongsToCollectionTable.name           = belongsToCollection.name
-        belongsToCollectionTable.posterPath     = belongsToCollection.posterPath
-        belongsToCollectionTable.backdropPath   = belongsToCollection.backdropPath
+        belongsToCollectionTable.posterPath     = belongsToCollection.posterPath ?: "-"
+        belongsToCollectionTable.backdropPath   = belongsToCollection.backdropPath ?: "-"
 
         belongsToCollectionDao.insert(belongsToCollectionTable)
 
