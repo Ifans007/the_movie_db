@@ -1,4 +1,4 @@
-package com.example.themoviedb.ui.fragments.popular
+package com.example.themoviedb.ui.main.categories
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -16,16 +16,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.themoviedb.InitDatabase
 import com.example.themoviedb.R
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
-import com.example.themoviedb.database.repositories.PopularRepository
+import com.example.themoviedb.database.entities.moviescategory.MovieCategoryIdTable
+import com.example.themoviedb.database.repositories.MovieCategoryRepository
+import com.example.themoviedb.retrofitservice.requests.models.MoviesRequest
 import com.example.themoviedb.ui.OnClickListenerMovie
-import com.example.themoviedb.ui.activity.moviedescription.MovieDetailsActivity
-import com.example.themoviedb.ui.fragments.popular.inflater.PopularAdapter
-import com.example.themoviedb.ui.fragments.popular.inflater.PopularViewModel
-import com.example.themoviedb.ui.fragments.popular.inflater.ViewModelPopularFactory
+import com.example.themoviedb.ui.main.categories.inflater.MovieCategoryAdapter
+import com.example.themoviedb.ui.main.categories.inflater.MovieCategoryViewModel
+import com.example.themoviedb.ui.main.categories.inflater.ViewModelMovieCategoryFactory
+import com.example.themoviedb.ui.moviedescription.MovieDetailsActivity
 
-
-class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
+abstract class AbstractFragmentCategory : Fragment(), OnClickListenerMovie {
 
     private val GRID_COLUMNS_PORTRAIT = 1
     private val GRID_COLUMNS_LANDSCAPE = 2
@@ -35,12 +35,12 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    private lateinit var viewModel: PopularViewModel
-    private lateinit var movieAdapter: PopularAdapter
+    private lateinit var viewModel: MovieCategoryViewModel
+    private lateinit var movieAdapter: MovieCategoryAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        mainView = inflater.inflate(R.layout.fragment_popular_movies, container, false)
+        mainView = inflater.inflate(R.layout.fragment_movie_category, container, false)
 
         initView()
         initRecyclerView()
@@ -53,8 +53,8 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
     }
 
     private fun initView() {
-        recyclerView = mainView.findViewById(R.id.fragment_popular_movies_recycler_view)
-        swipeRefreshLayout = mainView.findViewById(R.id.fragment_popular_movies_swipe_refresh)
+        recyclerView = mainView.findViewById(R.id.fragment_movie_category_recycler_view)
+        swipeRefreshLayout = mainView.findViewById(R.id.fragment_movie_category_swipe_refresh)
         swipeRefreshLayout.isRefreshing = true
     }
 
@@ -62,16 +62,16 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
         configureRecyclerAdapter(resources.configuration.orientation)
 
         viewModel = ViewModelProviders.of(this,
-            ViewModelPopularFactory(
-                PopularRepository()
+            ViewModelMovieCategoryFactory(
+                MovieCategoryRepository(this@AbstractFragmentCategory)
             )
         )
-            .get(PopularViewModel::class.java)
+            .get(MovieCategoryViewModel::class.java)
 
-        movieAdapter = PopularAdapter(this)
+        movieAdapter = MovieCategoryAdapter(this)
         recyclerView.adapter = movieAdapter
 
-        viewModel.nowShowing.observe(this, Observer<PagedList<PopularMoviesIdTable>> {
+        viewModel.nowShowing.observe(this, Observer<PagedList<MovieCategoryIdTable>> {
             movieAdapter.submitList(it)
 
             if (it.isNotEmpty()) {
@@ -109,5 +109,13 @@ class PopularMoviesFragment : Fragment(), OnClickListenerMovie {
         val intent = Intent(context, MovieDetailsActivity::class.java)
         intent.putExtra("movieId",movieId)
         context!!.startActivity(intent)
+    }
+
+    abstract fun getRequest(page: Int,
+                            onSuccess: (moviesRequest: MoviesRequest) -> Unit,
+                            onError: (error: String) -> Unit)
+
+    fun getSimpleName(): String {
+        return javaClass.simpleName
     }
 }

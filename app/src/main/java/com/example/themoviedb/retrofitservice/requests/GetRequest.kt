@@ -11,6 +11,14 @@ import retrofit2.Response
 val service: Requests = RetrofitClient.instance
 val TMDB_API_KEY = "6e28454b2acfbee3d6116e0792901bd7"
 
+enum class MovieCategory(val movieCategory: String) {
+    POPULAR("popular"),
+    TOP_RATED("top_rated"),
+    UPCOMING("upcoming"),
+    NOW_PLAYING("now_playing")
+
+}
+
 object GetRequest {
 
     fun getGenresList(onSuccess: (movie: GenresRequest) -> Unit,
@@ -64,12 +72,14 @@ object GetRequest {
 
     }
 
-    fun getPopularMovies(
+    fun getMoviesCategory(
+        movieCategory: MovieCategory,
         page: Int,
         onSuccess: (moviesRequest: MoviesRequest) -> Unit,
         onError: (error: String) -> Unit) {
 
-        service.popularMovies(
+        service.movieCategory(
+            movieCategory.movieCategory,
             TMDB_API_KEY,
             "ru-RU",
             page,

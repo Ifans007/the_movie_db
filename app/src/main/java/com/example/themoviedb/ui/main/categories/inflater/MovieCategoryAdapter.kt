@@ -1,4 +1,4 @@
-package com.example.themoviedb.ui.fragments.popular.inflater
+package com.example.themoviedb.ui.main.categories.inflater
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedb.R
 import com.example.themoviedb.database.DatabaseApp
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
+import com.example.themoviedb.database.entities.moviescategory.MovieCategoryIdTable
 import com.example.themoviedb.ui.OnClickListenerMovie
 
-class PopularAdapter(private val popularMoviesFragmentListener: OnClickListenerMovie) : PagedListAdapter<PopularMoviesIdTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
+class MovieCategoryAdapter(private val movieCategoryFragmentListener: OnClickListenerMovie) : PagedListAdapter<MovieCategoryIdTable, RecyclerView.ViewHolder>(REPOSITORY_COMPARATOR) {
 
     private val databaseApp = DatabaseApp.getInstance()
 
@@ -19,32 +19,32 @@ class PopularAdapter(private val popularMoviesFragmentListener: OnClickListenerM
 
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.movie_single_item, parent, false)
 
-        return PopularViewHolder(
+        return MovieCategoryViewHolder(
             view,
             parent.context,
-            popularMoviesFragmentListener
+            movieCategoryFragmentListener
         )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        val popularMoviesIdTable: PopularMoviesIdTable? = getItem(position)
+        val movieCategoryIdTable: MovieCategoryIdTable? = getItem(position)
 
-        if (popularMoviesIdTable != null) {
-            val movieViewHolder = holder as PopularViewHolder
-            movieViewHolder.bindPopularData(popularMoviesIdTable, databaseApp)
+        if (movieCategoryIdTable != null) {
+            val movieViewHolder = holder as MovieCategoryViewHolder
+            movieViewHolder.bindMovieCategoryData(movieCategoryIdTable, databaseApp)
         } else {
             notifyItemRemoved(position)
         }
     }
 
     companion object {
-        private val REPOSITORY_COMPARATOR = object : DiffUtil.ItemCallback<PopularMoviesIdTable>() {
-            override fun areItemsTheSame(oldItem: PopularMoviesIdTable, newItem: PopularMoviesIdTable): Boolean {
+        private val REPOSITORY_COMPARATOR = object : DiffUtil.ItemCallback<MovieCategoryIdTable>() {
+            override fun areItemsTheSame(oldItem: MovieCategoryIdTable, newItem: MovieCategoryIdTable): Boolean {
                 return oldItem.movieId == newItem.movieId
             }
 
-            override fun areContentsTheSame(oldItem: PopularMoviesIdTable, newItem: PopularMoviesIdTable): Boolean {
+            override fun areContentsTheSame(oldItem: MovieCategoryIdTable, newItem: MovieCategoryIdTable): Boolean {
                 return oldItem == newItem
             }
         }

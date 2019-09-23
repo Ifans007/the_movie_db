@@ -1,4 +1,4 @@
-package com.example.themoviedb.ui.fragments.popular.inflater
+package com.example.themoviedb.ui.main.categories.inflater
 
 import android.content.Context
 import android.view.View
@@ -12,13 +12,13 @@ import com.example.themoviedb.R
 import com.example.themoviedb.Resources
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.entities.CommonInfoMoviesTable
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
+import com.example.themoviedb.database.entities.moviescategory.MovieCategoryIdTable
 import com.example.themoviedb.ui.OnClickListenerMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
-class PopularViewHolder(
+class MovieCategoryViewHolder(
     itemView: View,
     private val context: Context,
     private val popularMoviesFragmentListener: OnClickListenerMovie
@@ -43,24 +43,24 @@ class PopularViewHolder(
         itemView.setOnClickListener(this)
     }
 
-    fun bindPopularData(
-        popularMoviesIdTable: PopularMoviesIdTable,
+    fun bindMovieCategoryData(
+        movieCategoryIdTable: MovieCategoryIdTable,
         databaseApp: DatabaseApp
     ) {
 
         runBlocking {
-            val movieDeferred = async(Dispatchers.IO) { getMovie(popularMoviesIdTable, databaseApp) }.await()
+            val movieDeferred = async(Dispatchers.IO) { getMovie(movieCategoryIdTable, databaseApp) }.await()
             fillView(movieDeferred)
         }
 
     }
 
     private fun getMovie(
-        popularMoviesIdTable: PopularMoviesIdTable,
+        movieCategoryIdTable: MovieCategoryIdTable,
         databaseApp: DatabaseApp
     ): CommonInfoMoviesTable? {
 
-        return databaseApp.commonInfoMoviesDao().getById(popularMoviesIdTable.movieId)
+        return databaseApp.commonInfoMoviesDao().getById(movieCategoryIdTable.movieId)
     }
 
 

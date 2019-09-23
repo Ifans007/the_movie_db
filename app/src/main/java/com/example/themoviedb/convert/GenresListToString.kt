@@ -2,8 +2,8 @@ package com.example.themoviedb.convert
 
 import com.example.themoviedb.database.DatabaseApp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 object GenresListToString {
 
@@ -21,12 +21,18 @@ object GenresListToString {
 
                     if (genreId != genreIds.last()) {
 
-                        val genre = async(Dispatchers.IO) { databaseApp.genreDao().getById(genreId).name }
-                        genres += "${genre.await().toUpperCase()}, "
+                        val genre =
+                            withContext(Dispatchers.IO) {
+                                databaseApp.genreDao().getById(genreId).name
+                            }
+                        genres += "${genre.toUpperCase()}, "
 
                     } else {
-                        val genre = async(Dispatchers.IO) { databaseApp.genreDao().getById(genreId).name }
-                        genres += genre.await().toUpperCase()
+                        val genre =
+                            withContext(Dispatchers.IO) {
+                                databaseApp.genreDao().getById(genreId).name
+                            }
+                        genres += genre.toUpperCase()
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.themoviedb.ui.activity.moviedescription.fragments
+package com.example.themoviedb.ui.moviedescription.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

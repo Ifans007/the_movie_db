@@ -1,4 +1,4 @@
-package com.example.themoviedb.ui.activity.moviedescription
+package com.example.themoviedb.ui.moviedescription
 
 import android.graphics.Color
 import android.os.Build
@@ -18,8 +18,9 @@ import com.example.themoviedb.Resources
 import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.cache.detailsinfo.DetailsMoviesCache
 import com.example.themoviedb.database.entities.detailsinfo.DetailsInfoMoviesTable
-import com.example.themoviedb.ui.activity.moviedescription.fragments.DetailsMovieCastFragment
-import com.example.themoviedb.ui.activity.moviedescription.fragments.DetailsMovieInfoFragment
+import com.example.themoviedb.ui.MovieViewPagerAdapter
+import com.example.themoviedb.ui.moviedescription.fragments.DetailsMovieCastFragment
+import com.example.themoviedb.ui.moviedescription.fragments.DetailsMovieInfoFragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +116,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun setupViewPager() {
         val detailsMovieViewPagerAdapter =
-            DetailsMovieViewPagerAdapter(
+            MovieViewPagerAdapter(
                 supportFragmentManager
             )
 

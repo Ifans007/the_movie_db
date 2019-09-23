@@ -1,12 +1,16 @@
-package com.example.themoviedb
+package com.example.themoviedb.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
-import com.example.themoviedb.ui.fragments.MovieViewPagerAdapter
-import com.example.themoviedb.ui.fragments.popular.PopularMoviesFragment
-import com.example.themoviedb.ui.fragments.toprated.TopRatedFragment
+import com.example.themoviedb.InitDatabase
+import com.example.themoviedb.R
+import com.example.themoviedb.ui.MovieViewPagerAdapter
+import com.example.themoviedb.ui.main.categories.fragmentscategory.NowPlayingFragment
+import com.example.themoviedb.ui.main.categories.fragmentscategory.PopularFragment
+import com.example.themoviedb.ui.main.categories.fragmentscategory.TopRatedFragment
+import com.example.themoviedb.ui.main.categories.fragmentscategory.UpcomingFragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,10 +48,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager() {
-        val movieViewPagerAdapter = MovieViewPagerAdapter(supportFragmentManager)
+        val movieViewPagerAdapter =
+            MovieViewPagerAdapter(supportFragmentManager)
 
-        movieViewPagerAdapter.addFragment(PopularMoviesFragment(), "Популярные")
+        movieViewPagerAdapter.addFragment(PopularFragment(), "Популярные")
         movieViewPagerAdapter.addFragment(TopRatedFragment(), "Лучшие")
+        movieViewPagerAdapter.addFragment(UpcomingFragment(), "Ожидаемые")
+        movieViewPagerAdapter.addFragment(NowPlayingFragment(), "Смотрят сейчас")
 
         viewPager.adapter = movieViewPagerAdapter
     }

@@ -18,8 +18,9 @@ interface Requests {
     ): Call<DetailsInfoMoviesModel>
 
 
-    @GET("movie/popular")
-    fun popularMovies(@Query("api_key") apiKey: String,
+    @GET("movie/{movie_category}")
+    fun movieCategory(@Path("movie_category") movieCategory: String,
+                      @Query("api_key") apiKey: String,
                       @Query("language") language: String,
                       @Query("page") pageNumber: Int,
                       @Query("region") region: String

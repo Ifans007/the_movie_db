@@ -1,4 +1,4 @@
-package com.example.themoviedb.ui.activity.moviedescription.fragments
+package com.example.themoviedb.ui.moviedescription.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle

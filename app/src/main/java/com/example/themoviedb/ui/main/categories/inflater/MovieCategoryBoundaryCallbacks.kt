@@ -1,18 +1,19 @@
-package com.example.themoviedb.ui.fragments.popular.inflater
+package com.example.themoviedb.ui.main.categories.inflater
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.example.themoviedb.database.cache.CommonInfoMoviesCache
-import com.example.themoviedb.database.cache.moviescategory.PopularMoviesIdListCache
-import com.example.themoviedb.database.entities.moviescategory.PopularMoviesIdTable
-import com.example.themoviedb.retrofitservice.requests.GetRequest
+import com.example.themoviedb.database.cache.moviescategory.MovieCategoryIdListCache
+import com.example.themoviedb.database.entities.moviescategory.MovieCategoryIdTable
+import com.example.themoviedb.ui.main.categories.AbstractFragmentCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PopularBoundaryCallbacks : PagedList.BoundaryCallback<PopularMoviesIdTable>() {
+class MovieCategoryBoundaryCallbacks(
+    private val abstractFragmentCategory: AbstractFragmentCategory) : PagedList.BoundaryCallback<MovieCategoryIdTable>() {
 
     private var lastRequestedPage = 0
 
@@ -21,32 +22,32 @@ class PopularBoundaryCallbacks : PagedList.BoundaryCallback<PopularMoviesIdTable
     val networkErrors: LiveData<String>
         get() = _networkErrors
 
-    private val popularMoviesIdListCache = PopularMoviesIdListCache
+    private val movieCategoryIdListCache = MovieCategoryIdListCache
 
     private val commonInfoMoviesCache = CommonInfoMoviesCache
 
     override fun onZeroItemsLoaded() {
-        requestAndSavePopularData()
+        requestAndSaveData()
     }
 
-    override fun onItemAtEndLoaded(itemAtEnd: PopularMoviesIdTable) {
-        requestAndSavePopularData()
+    override fun onItemAtEndLoaded(itemAtEnd: MovieCategoryIdTable) {
+        requestAndSaveData()
     }
 
-    private fun requestAndSavePopularData() {
+    private fun requestAndSaveData() {
 
         lastRequestedPage++
 
-        GetRequest.getPopularMovies(lastRequestedPage,
+        abstractFragmentCategory.getRequest(lastRequestedPage,
             { movieRequest ->
 
                 CoroutineScope(Dispatchers.IO).launch {
 
                     val listMoviesId = withContext(Dispatchers.IO) {
-                            commonInfoMoviesCache.insert(movieRequest.results!!)
+                        commonInfoMoviesCache.insert(movieRequest.results!!)
                     }
 
-                    popularMoviesIdListCache.insert(listMoviesId)
+                    movieCategoryIdListCache.insert(listMoviesId, abstractFragmentCategory.getSimpleName())
                 }
 
             }, { error ->

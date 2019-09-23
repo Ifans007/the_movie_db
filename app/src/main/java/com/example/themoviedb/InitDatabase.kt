@@ -5,6 +5,7 @@ import com.example.themoviedb.database.DatabaseApp
 import com.example.themoviedb.database.cache.detailsinfo.additions.GenreCache
 import com.example.themoviedb.retrofitservice.requests.GetRequest
 import com.example.themoviedb.retrofitservice.requests.models.GenresRequest
+import com.example.themoviedb.ui.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
